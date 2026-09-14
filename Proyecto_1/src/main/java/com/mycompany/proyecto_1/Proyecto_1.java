@@ -4,13 +4,16 @@
 
 package com.mycompany.proyecto_1;
 
+import Presentacion.MainFrame;
+
 /**
  *
- * @author Central
+ * @author Luis Alonso
  */
 public class Proyecto_1 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        MainFrame mf = new MainFrame();
+        mf.Iniciar();
     }
 }
