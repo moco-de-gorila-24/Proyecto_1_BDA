@@ -12,8 +12,6 @@ public class Tabla extends JTable {
         setFillsViewportHeight(true);
         setRowHeight(40);
         setShowGrid(false);
-        setSelectionBackground(Color.BLACK);
-        setSelectionForeground(Color.WHITE);
         setIntercellSpacing(new Dimension(0, 0));
 
         JTableHeader header = getTableHeader();
@@ -22,5 +20,10 @@ public class Tabla extends JTable {
         header.setReorderingAllowed(false);
 
 
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
     }
 }

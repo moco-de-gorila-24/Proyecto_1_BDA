@@ -1,10 +1,13 @@
 package Presentacion;
 
 import Presentacion.Componentes.Boton;
+import Presentacion.Paneles.PanelConsultas;
 import Presentacion.Paneles.PanelDuenios;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
 
@@ -14,8 +17,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-
-
     }
 
     public void Iniciar(){
@@ -44,11 +45,17 @@ public class MainFrame extends JFrame {
         PanelNorte.add(botonConsulta);
 
         PanelDuenios panelD = new PanelDuenios();
-        panelD.setBackground(Color.GRAY);
-        add(panelD, BorderLayout.CENTER );
+        PanelConsultas panelConsultas = new PanelConsultas();
+        add(panelConsultas, BorderLayout.CENTER );
         add(PanelNorte, BorderLayout.NORTH);
         add(PanelSur, BorderLayout.SOUTH);
 
+        botonConsulta.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
 
         setVisible(true);

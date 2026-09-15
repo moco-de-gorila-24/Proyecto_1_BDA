@@ -10,6 +10,7 @@ import java.awt.*;
 public class PanelDuenios extends JPanel {
     JScrollPane jscrollPane;
     JPanel panelDerecha;
+    JPanel panelTabla;
     Boton boton1;
     Boton boton2;
     Boton boton3;
@@ -21,6 +22,10 @@ public class PanelDuenios extends JPanel {
         jscrollPane.setPreferredSize(new Dimension(800, 500));
         panelDerecha = new JPanel();
         panelDerecha.setLayout(new GridBagLayout());
+        panelTabla = new JPanel(new BorderLayout());
+        panelTabla.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
+        panelTabla.add(jscrollPane, BorderLayout.CENTER);
+
         boton1 = new Boton("Texto 1");
         boton2 = new Boton("Texto 2");
         boton3 = new Boton("Texto 3");
@@ -32,7 +37,7 @@ public class PanelDuenios extends JPanel {
     public void Mostrar(){
         DefaultTableModel modelo = new DefaultTableModel();
         Tabla tabla = new Tabla(modelo);
-        tabla.setRowHeight(140);
+        tabla.setRowHeight(50);
 
         modelo.addColumn("Nombre");
         modelo.addColumn("Apellido paterno");
@@ -40,6 +45,7 @@ public class PanelDuenios extends JPanel {
         modelo.addColumn("Direccion");
         modelo.addColumn("Telefonos");
         modelo.addColumn("Email");
+        modelo.addRow(new Object[]{"Sebastian", "Escalante", "Ramirez", "Obregonyork", "6441234567", "ostionsito@email.com"});
         jscrollPane.setViewportView(tabla);
 
         panelDerecha.setLayout(new GridBagLayout());
@@ -48,7 +54,7 @@ public class PanelDuenios extends JPanel {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(30, 5, 30, 50);
+        gbc.insets = new Insets(15, 5, 15, 8);
 
         gbc.gridy = 0;
         panelDerecha.add(boton1, gbc);
@@ -62,9 +68,10 @@ public class PanelDuenios extends JPanel {
         gbc.gridy = 3;
         panelDerecha.add(boton4, gbc);
 
-
-
         add(panelDerecha, BorderLayout.EAST);
-        add(jscrollPane, BorderLayout.CENTER);
+        add(panelTabla, BorderLayout.CENTER);
+
+
+
     }
 }
