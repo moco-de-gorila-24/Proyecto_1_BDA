@@ -16,9 +16,7 @@ public class PanelConsultas extends JPanel {
     JPanel panelDerecha;
     JPanel panelTabla;
     Boton agendar;
-    Boton eliminar;
     Boton modificar;
-    Boton buscar;
 
 
     public PanelConsultas(){
@@ -31,9 +29,7 @@ public class PanelConsultas extends JPanel {
         panelTabla.add(jscrollPane, BorderLayout.CENTER);
 
         agendar = new Boton("Agendar consultas");
-        eliminar = new Boton("Eliminar consulta");
         modificar = new Boton("Modificar Consulta");
-        buscar = new Boton("Buscar Consulta");
 
         Mostrar();
     }
@@ -64,13 +60,7 @@ public class PanelConsultas extends JPanel {
         panelDerecha.add(agendar, gbc);
 
         gbc.gridy = 1;
-        panelDerecha.add(eliminar, gbc);
-
-        gbc.gridy = 2;
         panelDerecha.add(modificar, gbc);
-
-        gbc.gridy = 3;
-        panelDerecha.add(buscar, gbc);
 
         add(panelDerecha, BorderLayout.EAST);
         add(panelTabla, BorderLayout.CENTER);
