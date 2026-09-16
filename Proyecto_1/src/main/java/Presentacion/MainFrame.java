@@ -6,8 +6,8 @@ import Presentacion.Paneles.PanelDuenios;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import Presentacion.Paneles.PanelMascotas;
+import Presentacion.Paneles.PanelVeterinarios;
 
 public class MainFrame extends JFrame {
 
@@ -20,44 +20,41 @@ public class MainFrame extends JFrame {
     }
 
     public void Iniciar(){
-        JPanel PanelNorte = new JPanel();
-        JPanel PanelSur = new JPanel();
-        JScrollPane scrollPane = new JScrollPane();
+        JPanel PanelNorte = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         Boton botonDueño = new Boton("Dueños");
         Boton botonMascota = new Boton("Mascotas");
         Boton botonVeterinario = new Boton("Veterinarios");
         Boton botonConsulta = new Boton("Consultas");
 
-        botonDueño.setPreferredSize(new Dimension(140, 50));
-        botonMascota.setPreferredSize(new Dimension(140, 50));
-        botonVeterinario.setPreferredSize(new Dimension(140, 50));
-        botonConsulta.setPreferredSize(new Dimension(140, 50));
-
-        Boton botonGuardar = new Boton("Guardar");
-        Boton botonBorrar = new Boton("Borrar");
-        Boton botonCancelar = new Boton("Cancelar");
-        Boton botonEditar = new Boton("Editar");
+        Dimension dimBoton = new Dimension(140, 45);
+        botonDueño.setPreferredSize(dimBoton);
+        botonMascota.setPreferredSize(dimBoton);
+        botonVeterinario.setPreferredSize(dimBoton);
+        botonConsulta.setPreferredSize(dimBoton);
 
         PanelNorte.add(botonDueño);
         PanelNorte.add(botonMascota);
         PanelNorte.add(botonVeterinario);
         PanelNorte.add(botonConsulta);
 
-        PanelDuenios panelD = new PanelDuenios();
-        PanelConsultas panelConsultas = new PanelConsultas();
-        add(panelConsultas, BorderLayout.CENTER );
+        CardLayout cardLayout = new CardLayout();
+        JPanel panelContenido = new JPanel(cardLayout);
+
+        panelContenido.add(new PanelDuenios(), "duenios");
+        panelContenido.add(new PanelMascotas(), "mascotas");
+        panelContenido.add(new PanelVeterinarios(), "veterinarios");
+        panelContenido.add(new PanelConsultas(), "consultas");
+
+        botonDueño.addActionListener(e -> cardLayout.show(panelContenido, "duenios"));
+        botonMascota.addActionListener(e -> cardLayout.show(panelContenido, "mascotas"));
+        botonVeterinario.addActionListener(e -> cardLayout.show(panelContenido, "veterinarios"));
+        botonConsulta.addActionListener(e -> cardLayout.show(panelContenido, "consultas"));
+
         add(PanelNorte, BorderLayout.NORTH);
-        add(PanelSur, BorderLayout.SOUTH);
+        add(panelContenido, BorderLayout.CENTER);
 
-        botonConsulta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-
+        cardLayout.show(panelContenido, "consultas");
         setVisible(true);
     }
 }
