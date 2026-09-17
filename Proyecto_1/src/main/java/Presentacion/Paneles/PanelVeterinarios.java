@@ -3,6 +3,7 @@ package Presentacion.Paneles;
 import Presentacion.Componentes.Boton;
 import Presentacion.Componentes.CampoBusqueda;
 import Presentacion.Componentes.Tabla;
+import Presentacion.Dialog.DialogVeterinario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -90,6 +91,11 @@ public class PanelVeterinarios extends JPanel {
             if (confirm == JOptionPane.YES_OPTION) {
                 modelo.removeRow(fila);
             }
+        });
+
+        btnAgregar.addActionListener(e -> {
+            DialogVeterinario dialogVeterinario = new DialogVeterinario((Frame) SwingUtilities.getWindowAncestor(this));
+            dialogVeterinario.iniciarComponentes();
         });
     }
 

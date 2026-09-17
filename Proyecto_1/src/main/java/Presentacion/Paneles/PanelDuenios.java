@@ -3,24 +3,26 @@ package Presentacion.Paneles;
 import Presentacion.Componentes.Boton;
 import Presentacion.Componentes.CampoBusqueda;
 import Presentacion.Componentes.Tabla;
+import Presentacion.Dialog.DialogDuenio;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PanelDuenios extends JPanel {
     private JScrollPane jscrollPane;
     private JPanel panelDerecha;
     private JPanel panelTabla;
-    private Boton boton1;
-    private Boton boton2;
-    private Boton boton3;
-    private Boton boton4;
+    private Boton botonAgregar;
+    private Boton botonModificar;
+    private Boton botonEliminar;
     private CampoBusqueda campoBusqueda;
     private DefaultTableModel modelo;
     private Tabla tabla;
 
-    public PanelDuenios(){
+    public PanelDuenios() {
         setLayout(new BorderLayout());
 
         jscrollPane = new JScrollPane();
@@ -42,7 +44,9 @@ public class PanelDuenios extends JPanel {
 
         modelo = new DefaultTableModel() {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
         modelo.addColumn("ID");
         modelo.addColumn("Nombre");
@@ -58,9 +62,9 @@ public class PanelDuenios extends JPanel {
         jscrollPane.setViewportView(tabla);
         panelTabla.add(jscrollPane, BorderLayout.CENTER);
 
-        boton1 = new Boton("Agregar Dueño");
-        boton2 = new Boton("Modificar Dueño");
-        boton3 = new Boton("Eliminar Dueño");
+        botonAgregar = new Boton("Agregar Dueño");
+        botonModificar = new Boton("Modificar Dueño");
+        botonEliminar = new Boton("Eliminar Dueño");
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -69,24 +73,39 @@ public class PanelDuenios extends JPanel {
         gbc.insets = new Insets(15, 5, 15, 8);
 
         gbc.gridy = 0;
-        panelDerecha.add(boton1, gbc);
+        panelDerecha.add(botonAgregar, gbc);
         gbc.gridy = 1;
-        panelDerecha.add(boton2, gbc);
+        panelDerecha.add(botonModificar, gbc);
         gbc.gridy = 2;
-        panelDerecha.add(boton3, gbc);
+        panelDerecha.add(botonEliminar, gbc);
 
         add(panelDerecha, BorderLayout.WEST);
         add(panelTabla, BorderLayout.CENTER);
 
         // ===== Filtro en vivo =====
         campoBusqueda.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                filtrar();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                filtrar();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                filtrar();
+            }
         });
 
+        botonAgregar.addActionListener(e -> {
+            DialogDuenio dialogDuenio = new DialogDuenio((Frame) SwingUtilities.getWindowAncestor(this));
+
+            dialogDuenio.iniciarComponentes();
+        });
+
+
         // ELIMINACIÓN DIRECTA
-        boton3.addActionListener(e -> {
+        botonEliminar.addActionListener(e -> {
             int fila = tabla.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(this, "Seleccione un dueño para eliminar");
