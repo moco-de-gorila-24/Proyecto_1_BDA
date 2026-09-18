@@ -4,7 +4,9 @@
  */
 package Entidades;
 
-import java.time.LocalDate;
+import java.sql.Date;
+
+
 
 /**
  *
@@ -14,7 +16,7 @@ public class Mascota {
     private int idMascota;
     private String nombre;
     private String especie;
-    private LocalDate fechaNacimiento;
+    private Date fechaNacimiento;
     private String sexo;
     private String raza;
     private int idDueno;
@@ -22,7 +24,7 @@ public class Mascota {
     public Mascota() {
     }
 
-    public Mascota(int idMascota, String nombre, String especie, LocalDate fechaNacimiento, String sexo, String raza, int idDueno) {
+    public Mascota(int idMascota, String nombre, String especie, Date fechaNacimiento, String sexo, String raza, int idDueno) {
         this.idMascota = idMascota;
         this.nombre = nombre;
         this.especie = especie;
@@ -56,11 +58,11 @@ public class Mascota {
         this.especie = especie;
     }
 
-    public LocalDate getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

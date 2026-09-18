@@ -5,7 +5,8 @@
 package Entidades;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+
 
 /**
  *
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
  */
 public class Consulta {
     private int idConsulta;
-    private LocalDateTime fechaHora;
+    private Timestamp fechaHora;
     private String motivo;
     private String diagnostico;
     private String tratamiento;
@@ -24,7 +25,7 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(int idConsulta, LocalDateTime fechaHora, String motivo, String diagnostico, String tratamiento, BigDecimal costo, int idMascota, int idVeterinario) {
+    public Consulta(int idConsulta, Timestamp fechaHora, String motivo, String diagnostico, String tratamiento, BigDecimal costo, int idMascota, int idVeterinario) {
         this.idConsulta = idConsulta;
         this.fechaHora = fechaHora;
         this.motivo = motivo;
@@ -43,11 +44,11 @@ public class Consulta {
         this.idConsulta = idConsulta;
     }
 
-    public LocalDateTime getFechaHora() {
+    public Timestamp getFechaHora() {
         return fechaHora;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
+    public void setFechaHora(Timestamp fechaHora) {
         this.fechaHora = fechaHora;
     }
 
