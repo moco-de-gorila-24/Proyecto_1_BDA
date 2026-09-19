@@ -3,7 +3,7 @@
  */
 
 package com.mycompany.proyecto_1;
-
+    
 import Presentacion.MainFrame;
 
 /**
