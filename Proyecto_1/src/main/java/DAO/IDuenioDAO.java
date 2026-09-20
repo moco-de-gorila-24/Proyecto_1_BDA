@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import Entidades.Duenio;
+import Dominio.Entidades.Duenio;
 import java.util.List;
 
 /**

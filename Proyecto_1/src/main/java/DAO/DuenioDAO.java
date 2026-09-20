@@ -6,7 +6,7 @@ package DAO;
 
 import Conexion.ConexionDB;
 import Conexion.IConexion;
-import Entidades.Duenio;
+import Dominio.Entidades.Duenio;
 
 import java.sql.*;
 import java.util.ArrayList;

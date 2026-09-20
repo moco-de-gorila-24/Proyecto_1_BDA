@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import Entidades.Veterinario;
+import Dominio.Entidades.Veterinario;
 import java.util.List;
 
 /**

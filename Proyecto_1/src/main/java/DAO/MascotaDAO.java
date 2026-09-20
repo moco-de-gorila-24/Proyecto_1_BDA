@@ -5,7 +5,7 @@
 package DAO;
 
 import Conexion.ConexionDB;
-import Entidades.Mascota;
+import Dominio.Entidades.Mascota;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import Entidades.Consulta;
+import Dominio.Entidades.Consulta;
 import java.util.List;
 
 /**
