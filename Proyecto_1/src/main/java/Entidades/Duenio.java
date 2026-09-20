@@ -4,6 +4,8 @@
  */
 package Entidades;
 
+import java.util.List;
+
 /**
  *
  * @author ACER
@@ -15,17 +17,19 @@ public class Duenio {
     private String apellidoM;
     private String direccion;
     private String email;
+    private List<String> telefonos;
 
     public Duenio() {
     }
 
-    public Duenio(int idDueno, String nombre, String apellidoP, String apellidoM, String direccion, String email) {
+    public Duenio(int idDueno, String nombre, String apellidoP, String apellidoM, String direccion, String email, List<String> telefonos) {
         this.idDueno = idDueno;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
         this.apellidoM = apellidoM;
         this.direccion = direccion;
         this.email = email;
+        this.telefonos = telefonos;
     }
 
     public int getIdDueno() {
@@ -74,5 +78,13 @@ public class Duenio {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public List<String> getTelefonos(){
+        return telefonos;
+    }
+    
+    public void setTelefonos(List<String> telefonos){
+        this.telefonos = telefonos;
     }
 }

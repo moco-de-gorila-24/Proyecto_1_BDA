@@ -6,8 +6,6 @@ package Entidades;
 
 import java.sql.Date;
 
-
-
 /**
  *
  * @author ACER
