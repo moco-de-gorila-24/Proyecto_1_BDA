@@ -1,17 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Dominio.Entidades;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
-import java.sql.Date;
 
+/**
+ *
+ * @author ACER
+ */
 public class Consulta {
     private int idConsulta;
-    private Date fechaHora;
+    private Timestamp fechaHora;
     private String motivo;
     private String diagnostico;
     private String tratamiento;
-    private double costo;
+    private BigDecimal costo;
     private int idMascota;
     private int idVeterinario;
+
+    public Consulta() {
+    }
+
+    public Consulta(int idConsulta, Timestamp fechaHora, String motivo, String diagnostico, String tratamiento, BigDecimal costo, int idMascota, int idVeterinario) {
+        this.idConsulta = idConsulta;
+        this.fechaHora = fechaHora;
+        this.motivo = motivo;
+        this.diagnostico = diagnostico;
+        this.tratamiento = tratamiento;
+        this.costo = costo;
+        this.idMascota = idMascota;
+        this.idVeterinario = idVeterinario;
+    }
 
     public int getIdConsulta() {
         return idConsulta;
@@ -21,11 +44,11 @@ public class Consulta {
         this.idConsulta = idConsulta;
     }
 
-    public Date getFechaHora() {
+    public Timestamp getFechaHora() {
         return fechaHora;
     }
 
-    public void setFechaHora(Date fechaHora) {
+    public void setFechaHora(Timestamp fechaHora) {
         this.fechaHora = fechaHora;
     }
 
@@ -53,20 +76,20 @@ public class Consulta {
         this.tratamiento = tratamiento;
     }
 
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
     public int getIdMascota() {
         return idMascota;
     }
 
     public void setIdMascota(int idMascota) {
         this.idMascota = idMascota;
-    }
-
-    public double getCosto() {
-        return costo;
-    }
-
-    public void setCosto(double costo) {
-        this.costo = costo;
     }
 
     public int getIdVeterinario() {
