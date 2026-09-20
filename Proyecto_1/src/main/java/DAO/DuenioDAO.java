@@ -7,10 +7,8 @@ package DAO;
 import Conexion.ConexionDB;
 import Conexion.IConexion;
 import Entidades.Duenio;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +17,15 @@ import java.util.List;
  * @author ACER
  */
 public class DuenioDAO implements IDuenioDAO{
-     private IConexion conexionDB = new ConexionDB("root", "ITSON");
+     private IConexion conexion = new ConexionDB("root", "ITSON");
 
     @Override
     public boolean insertar(Duenio duenio) {
 
-        String sql = "INSERT INTO dueno (nombre, apellidoP, apellidoM, direccion, email) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO duenio (nombre, apellidoP, apellidoM, direccion, email) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = conexionDB.crearConexionBD()) {
-
-            PreparedStatement cmd = conn.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setString(1, duenio.getNombre());
             cmd.setString(2, duenio.getApellidoP());
@@ -50,11 +47,10 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public boolean actualizar(Duenio duenio) {
 
-        String sql = "UPDATE dueno SET nombre=?, apellidoP=?, apellidoM=?, direccion=?, email=? WHERE id_dueno=?";
+        String sql = "UPDATE dueno SET nombre=?, apellidoP=?, apellidoM=?, direccion=?, email=? WHERE id_duenio=?";
 
-        try (Connection conn = conexionDB.crearConexionBD()) {
-
-            PreparedStatement cmd = conn.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setString(1, duenio.getNombre());
             cmd.setString(2, duenio.getApellidoP());
@@ -77,11 +73,10 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public boolean eliminar(int id) {
 
-        String sql = "DELETE FROM dueno WHERE id_dueno=?";
+        String sql = "DELETE FROM dueno WHERE id_duenio=?";
 
-        try (Connection conn = conexionDB.crearConexionBD()) {
-
-            PreparedStatement cmd = conn.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setInt(1, id);
 
@@ -99,11 +94,10 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public Duenio consultar(int id) {
 
-        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM dueno WHERE id_dueno=?";
+        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM dueno WHERE id_duenio=?";
 
-        try (Connection conn = conexionDB.crearConexionBD()) {
-
-            PreparedStatement cmd = conn.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setInt(1, id);
 
@@ -113,7 +107,7 @@ public class DuenioDAO implements IDuenioDAO{
 
                 Duenio duenio = new Duenio();
 
-                duenio.setIdDueno(rs.getInt("id_dueno"));
+                duenio.setIdDueno(rs.getInt("id_duenio"));
                 duenio.setNombre(rs.getString("nombre"));
                 duenio.setApellidoP(rs.getString("apellidoP"));
                 duenio.setApellidoM(rs.getString("apellidoM"));
@@ -135,11 +129,10 @@ public class DuenioDAO implements IDuenioDAO{
 
         List<Duenio> lista = new ArrayList<>();
 
-        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM dueno";
+        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM duenio";
 
-        try (Connection conn = conexionDB.crearConexionBD()) {
-
-            PreparedStatement cmd = conn.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)) {
 
             ResultSet rs = cmd.executeQuery();
 
@@ -147,7 +140,7 @@ public class DuenioDAO implements IDuenioDAO{
 
                 Duenio duenio = new Duenio();
 
-                duenio.setIdDueno(rs.getInt("id_dueno"));
+                duenio.setIdDueno(rs.getInt("id_duenio"));
                 duenio.setNombre(rs.getString("nombre"));
                 duenio.setApellidoP(rs.getString("apellidoP"));
                 duenio.setApellidoM(rs.getString("apellidoM"));

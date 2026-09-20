@@ -9,6 +9,7 @@ import Entidades.Veterinario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,8 @@ public class VeterinarioDAO implements IVeterinarioDAO{
                 + "(nombre, apellidoP, apellidoM, cedula_profesional, especialidad, telefono) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setString(1, veterinario.getNombre());
             cmd.setString(2, veterinario.getApellidoP());
@@ -55,9 +55,8 @@ public class VeterinarioDAO implements IVeterinarioDAO{
 
         String sql = "UPDATE veterinario SET nombre = ?, apellidoP = ?, apellidoM = ?, cedula_profesional = ?, especialidad = ?, telefono = ? WHERE id_veterinario = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setString(1, veterinario.getNombre());
             cmd.setString(2, veterinario.getApellidoP());
@@ -85,9 +84,8 @@ public class VeterinarioDAO implements IVeterinarioDAO{
 
         String sql = "DELETE FROM veterinario WHERE id_veterinario = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
             cmd.executeUpdate();
@@ -108,9 +106,8 @@ public class VeterinarioDAO implements IVeterinarioDAO{
 
         String sql = "SELECT * FROM veterinario WHERE id_veterinario = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
 
@@ -153,9 +150,8 @@ public class VeterinarioDAO implements IVeterinarioDAO{
 
         String sql = "SELECT * FROM veterinario";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             ResultSet res = cmd.executeQuery();
 

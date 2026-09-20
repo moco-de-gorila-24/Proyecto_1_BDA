@@ -9,6 +9,7 @@ import Entidades.Mascota;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class MascotaDAO implements IMascotaDAO{
 
         String sql = "INSERT INTO mascota (nombre, especie, fecha_nacimiento, sexo, raza, id_dueno) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+
 
             cmd.setString(1, mascota.getNombre());
             cmd.setString(2, mascota.getEspecie());
@@ -53,9 +54,8 @@ public class MascotaDAO implements IMascotaDAO{
 
         String sql = "UPDATE mascota SET nombre = ?, especie = ?, fecha_nacimiento = ?, sexo = ?, raza = ?, id_dueno = ? WHERE id_mascota = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setString(1, mascota.getNombre());
             cmd.setString(2, mascota.getEspecie());
@@ -83,9 +83,8 @@ public class MascotaDAO implements IMascotaDAO{
 
         String sql = "DELETE FROM mascota WHERE id_mascota = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
             cmd.executeUpdate();
@@ -106,9 +105,8 @@ public class MascotaDAO implements IMascotaDAO{
 
         String sql = "SELECT * FROM mascota WHERE id_mascota = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
 
@@ -151,9 +149,8 @@ public class MascotaDAO implements IMascotaDAO{
 
         String sql = "SELECT * FROM mascota";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             ResultSet res = cmd.executeQuery();
 

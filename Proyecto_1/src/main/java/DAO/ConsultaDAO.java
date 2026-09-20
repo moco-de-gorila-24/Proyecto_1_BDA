@@ -9,6 +9,7 @@ import Entidades.Consulta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,8 @@ public class ConsultaDAO implements IConsultaDAO {
 
         String sql = "INSERT INTO consulta (fecha_hora, motivo, diagnostico, tratamiento, costo, id_mascota, id_veterinario) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try(Connection con = this.conexion.crearConexionBD();
+            PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setTimestamp(1, consulta.getFechaHora());
             cmd.setString(2, consulta.getMotivo());
@@ -54,9 +54,8 @@ public class ConsultaDAO implements IConsultaDAO {
 
         String sql = "UPDATE consulta SET fecha_hora = ?, motivo = ?, diagnostico = ?, tratamiento = ?, costo = ?, id_mascota = ?, id_veterinario = ? WHERE id_consulta = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setTimestamp(1, consulta.getFechaHora());
             cmd.setString(2, consulta.getMotivo());
@@ -85,9 +84,8 @@ public class ConsultaDAO implements IConsultaDAO {
 
         String sql = "DELETE FROM consulta WHERE id_consulta = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
             cmd.executeUpdate();
@@ -108,9 +106,8 @@ public class ConsultaDAO implements IConsultaDAO {
 
         String sql = "SELECT * FROM consulta WHERE id_consulta = ?";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             cmd.setInt(1, id);
 
@@ -154,9 +151,8 @@ public class ConsultaDAO implements IConsultaDAO {
 
         String sql = "SELECT * FROM consulta";
 
-        try {
-            Connection con = conexion.crearConexionBD();
-            PreparedStatement cmd = con.prepareStatement(sql);
+        try (Connection con = this.conexion.crearConexionBD();
+             PreparedStatement cmd = con.prepareStatement(sql)){
 
             ResultSet res = cmd.executeQuery();
 
