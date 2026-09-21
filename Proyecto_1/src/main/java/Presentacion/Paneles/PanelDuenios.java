@@ -1,5 +1,7 @@
 package Presentacion.Paneles;
 
+import DAO.DuenioDAO;
+import Dominio.Entidades.Duenio;
 import Presentacion.Componentes.Boton;
 import Presentacion.Componentes.CampoBusqueda;
 import Presentacion.Componentes.Tabla;
@@ -7,47 +9,66 @@ import Presentacion.Dialog.DialogDuenio;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class PanelDuenios extends JPanel {
+
     private JScrollPane jscrollPane;
     private JPanel panelDerecha;
     private JPanel panelTabla;
+
     private Boton botonAgregar;
     private Boton botonModificar;
     private Boton botonEliminar;
+
     private CampoBusqueda campoBusqueda;
+
     private DefaultTableModel modelo;
     private Tabla tabla;
 
+    private DuenioDAO duenioDAO;
+
     public PanelDuenios() {
+
+        duenioDAO = new DuenioDAO();
+
         setLayout(new BorderLayout());
+
+        //Panel de la tabla
 
         jscrollPane = new JScrollPane();
         jscrollPane.setPreferredSize(new Dimension(800, 500));
 
-        panelDerecha = new JPanel();
-        panelDerecha.setLayout(new GridBagLayout());
-
         panelTabla = new JPanel(new BorderLayout());
         panelTabla.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
 
-        // ===== Campo de búsqueda arriba de la tabla =====
+        //Campo de busqueda
+
         JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+
         campoBusqueda = new CampoBusqueda("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*", 25);
-        campoBusqueda.setToolTipText("Buscar por nombre o apellido (solo letras)");
+
+        campoBusqueda.setToolTipText("Buscar por nombre o apellido");
+
         panelBusqueda.add(new JLabel("Buscar:"));
         panelBusqueda.add(campoBusqueda);
+
         panelTabla.add(panelBusqueda, BorderLayout.NORTH);
 
+        //Modelo de la tabla
+
         modelo = new DefaultTableModel() {
+            
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         modelo.addColumn("ID");
         modelo.addColumn("Nombre");
         modelo.addColumn("Apellido Paterno");
@@ -55,18 +76,24 @@ public class PanelDuenios extends JPanel {
         modelo.addColumn("Dirección");
         modelo.addColumn("Teléfono");
         modelo.addColumn("Email");
-        modelo.addRow(new Object[]{"1", "Sebastián", "Escalante", "Ramírez", "Obregón 123", "6441234567", "sebas@email.com"});
 
         tabla = new Tabla(modelo);
         tabla.setRowHeight(50);
+
         jscrollPane.setViewportView(tabla);
+
         panelTabla.add(jscrollPane, BorderLayout.CENTER);
+
+        //Botones
 
         botonAgregar = new Boton("Agregar Dueño");
         botonModificar = new Boton("Modificar Dueño");
         botonEliminar = new Boton("Eliminar Dueño");
 
+        panelDerecha = new JPanel(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -74,63 +101,201 @@ public class PanelDuenios extends JPanel {
 
         gbc.gridy = 0;
         panelDerecha.add(botonAgregar, gbc);
+
         gbc.gridy = 1;
         panelDerecha.add(botonModificar, gbc);
+
         gbc.gridy = 2;
         panelDerecha.add(botonEliminar, gbc);
 
+        //Agregar al panel principal
+
         add(panelDerecha, BorderLayout.WEST);
+
         add(panelTabla, BorderLayout.CENTER);
 
-        // ===== Filtro en vivo =====
-        campoBusqueda.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        //Cargar datos de la base de datos
+
+        cargarDuenios();
+        
+        //Busqueda en vivo
+
+        campoBusqueda.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
                 filtrar();
             }
 
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
                 filtrar();
             }
 
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
                 filtrar();
-            }
-        });
+            }});
 
-        botonAgregar.addActionListener(e -> {
-            DialogDuenio dialogDuenio = new DialogDuenio((Frame) SwingUtilities.getWindowAncestor(this));
+        //Boton agregar
+        botonAgregar.addActionListener(e -> agregarDuenio());
 
-            dialogDuenio.iniciarComponentes();
-        });
+        //Boton modificar
+        botonModificar.addActionListener(e -> modificarDuenio());
 
-
-        // ELIMINACIÓN DIRECTA
-        botonEliminar.addActionListener(e -> {
-            int fila = tabla.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione un dueño para eliminar");
-                return;
-            }
-            int confirm = JOptionPane.showConfirmDialog(
-                this, "¿Eliminar el dueño seleccionado?",
-                "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (confirm == JOptionPane.YES_OPTION) {
-                modelo.removeRow(fila);
-            }
-        });
+        //Boton eliminar
+        botonEliminar.addActionListener(e -> eliminarDuenio());
     }
 
+    //Cargar dueños
+
+    private void cargarDuenios() {
+
+        modelo.setRowCount(0);
+
+        List<Duenio> duenios = duenioDAO.consultarTodos();
+
+        for (Duenio duenio : duenios) {
+            modelo.addRow(new Object[]{duenio.getIdDueno(), duenio.getNombre(), duenio.getApellidoP(), duenio.getApellidoM(), duenio.getDireccion(), obtenerTelefonos(duenio), duenio.getEmail()});
+        }
+    }
+
+    //Obtener telefonos como texto
+
+    private String obtenerTelefonos(Duenio duenio) {
+
+        if (duenio.getTelefonos() == null || duenio.getTelefonos().isEmpty()) {
+            return "";
+        }
+
+        return String.join(", ", duenio.getTelefonos());
+    }
+
+    //Agregar dueño
+
+    private void agregarDuenio() {
+
+        Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+
+        DialogDuenio dialog = new DialogDuenio(frame);
+
+        if (dialog.isAceptado()) {
+
+            Duenio duenio = dialog.getDuenio();
+
+            boolean resultado = duenioDAO.insertar(duenio);
+
+            if (resultado) {
+
+                JOptionPane.showMessageDialog(this, "Dueño registrado correctamente.", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+                cargarDuenios();
+            } else {
+
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el dueño.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    //Modificar dueño
+
+    private void modificarDuenio() {
+
+        int filaVista = tabla.getSelectedRow();
+
+        if (filaVista == -1) {
+
+            JOptionPane.showMessageDialog(this, "Seleccione un dueño para modificar.", "Modificar dueño", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Convertimos la fila de la vista a la fila real del modelo.
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+
+        int id = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+
+        Duenio duenio =duenioDAO.consultar(id);
+
+        if (duenio == null) {
+
+            JOptionPane.showMessageDialog(this, "No se encontro el dueño.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+
+        DialogDuenio dialog = new DialogDuenio(frame, duenio);
+
+        if (dialog.isAceptado()) {
+
+            Duenio duenioActualizado = dialog.getDuenio();
+
+            boolean resultado = duenioDAO.actualizar(duenioActualizado);
+
+            if (resultado) {
+
+                JOptionPane.showMessageDialog(this, "Dueño modificado correctamente.", "Modificacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+                cargarDuenios();
+            } else {
+
+                JOptionPane.showMessageDialog(this, "No se pudo modificar el dueño.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    //Eliminar dueño
+
+    private void eliminarDuenio() {
+
+        int filaVista = tabla.getSelectedRow();
+
+        if (filaVista == -1) {
+
+            JOptionPane.showMessageDialog(this, "Seleccione un dueño para eliminar.", "Eliminar dueño", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+
+        int id = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+
+        String nombre = modelo.getValueAt(filaModelo, 1).toString();
+
+        String apellido = modelo.getValueAt(filaModelo, 2).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Esta seguro de eliminar al dueño " + nombre + " " + apellido + "?", "Confirmar eliminacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        boolean resultado = duenioDAO.eliminar(id);
+
+        if (resultado) {
+
+            JOptionPane.showMessageDialog(this, "Dueño eliminado correctamente.", "Eliminacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+            cargarDuenios();
+        } else {
+
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar el dueño.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Filtrar tabla
+
     private void filtrar() {
+
         String texto = campoBusqueda.getText().trim();
-        javax.swing.table.TableRowSorter<DefaultTableModel> sorter =
-                new javax.swing.table.TableRowSorter<>(modelo);
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+
         tabla.setRowSorter(sorter);
 
         if (texto.isEmpty()) {
+
             sorter.setRowFilter(null);
         } else {
-            // Filtra por Nombre (1), Apellido Paterno (2), Apellido Materno (3)
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
+            
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
         }
     }
 }

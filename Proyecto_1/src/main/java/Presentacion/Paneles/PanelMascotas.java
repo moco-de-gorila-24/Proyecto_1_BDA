@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class PanelMascotas extends JPanel {
@@ -129,17 +130,17 @@ public class PanelMascotas extends JPanel {
         campoBusqueda.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+            public void insertUpdate(DocumentEvent e) {
                 filtrar();
             }
 
             @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            public void removeUpdate(DocumentEvent e) {
                 filtrar();
             }
 
             @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            public void changedUpdate(DocumentEvent e) {
                 filtrar();
             }
         });
