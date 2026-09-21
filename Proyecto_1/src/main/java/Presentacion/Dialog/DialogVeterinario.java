@@ -125,7 +125,7 @@ public class DialogVeterinario extends JDialog {
         gbc.gridx = 1;
         gbc.weightx = 1.0;
 
-        campoCedula = new CampoBusqueda("\\d{1,8}", 25);
+        campoCedula = new CampoBusqueda("[A-Z]{0,3}\\d{0,6}", 25);
 
         panelContenido.add(campoCedula, gbc);
 
@@ -215,9 +215,10 @@ public class DialogVeterinario extends JDialog {
 
         //Validar cedula
 
-        if (campoCedula.getText().trim().isEmpty() || !campoCedula.esValido()) {
+        if (campoCedula.getText().trim().isEmpty() || !campoCedula.getText().trim().matches("[A-Z]{3}\\d{6}")) {
 
-            JOptionPane.showMessageDialog(this, "Ingrese una cedula profesional valida.", "Dato invalido", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ingrese una cedula profesional valida.\n" + "Formato: ABC123456", "Dato invalido", JOptionPane.WARNING_MESSAGE);
+            campoCedula.requestFocus();
             return;
         }
 
