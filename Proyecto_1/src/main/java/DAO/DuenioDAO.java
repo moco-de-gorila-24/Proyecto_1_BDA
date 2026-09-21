@@ -8,16 +8,17 @@ import Conexion.ConexionDB;
 import Conexion.IConexion;
 import Dominio.Entidades.Duenio;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ACER
- */
-public class DuenioDAO implements IDuenioDAO{
-     private IConexion conexion = new ConexionDB("root", "ITSON");
+public class DuenioDAO implements IDuenioDAO {
+
+    private IConexion conexion = new ConexionDB("root", "ITSON");
 
     @Override
     public boolean insertar(Duenio duenio) {
@@ -25,7 +26,7 @@ public class DuenioDAO implements IDuenioDAO{
         String sql = "INSERT INTO duenio (nombre, apellidoP, apellidoM, direccion, email) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = this.conexion.crearConexionBD();
-             PreparedStatement cmd = con.prepareStatement(sql)) {
+            PreparedStatement cmd = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             cmd.setString(1, duenio.getNombre());
             cmd.setString(2, duenio.getApellidoP());
@@ -35,10 +36,35 @@ public class DuenioDAO implements IDuenioDAO{
 
             int res = cmd.executeUpdate();
 
-            return res > 0;
+            if (res == 0) {
+                return false;
+            }
+
+            ResultSet claves = cmd.getGeneratedKeys();
+
+            if (claves.next()) {
+
+                int idDueno = claves.getInt(1);
+
+                String sqlTelefono = "INSERT INTO telefono_duenio (telefono, id_duenio) VALUES (?, ?)";
+
+                try (PreparedStatement cmdTelefono = con.prepareStatement(sqlTelefono)) {
+
+                    if (duenio.getTelefonos() != null) {
+
+                        for (String telefono : duenio.getTelefonos()) {
+                            cmdTelefono.setString(1, telefono);
+                            cmdTelefono.setInt(2, idDueno);
+                            cmdTelefono.executeUpdate();
+                        }
+                    }
+                }
+
+                return true;
+            }
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("Error al insertar dueño: " + ex.getMessage());
         }
 
         return false;
@@ -47,10 +73,10 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public boolean actualizar(Duenio duenio) {
 
-        String sql = "UPDATE dueno SET nombre=?, apellidoP=?, apellidoM=?, direccion=?, email=? WHERE id_duenio=?";
+        String sql = "UPDATE duenio SET nombre=?, apellidoP=?, apellidoM=?, direccion=?, email=? WHERE id_duenio=?";
 
         try (Connection con = this.conexion.crearConexionBD();
-             PreparedStatement cmd = con.prepareStatement(sql)) {
+            PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setString(1, duenio.getNombre());
             cmd.setString(2, duenio.getApellidoP());
@@ -61,10 +87,37 @@ public class DuenioDAO implements IDuenioDAO{
 
             int res = cmd.executeUpdate();
 
-            return res > 0;
+            if (res == 0) {
+                return false;
+            }
+
+            // Eliminamos los teléfonos anteriores
+            String sqlEliminarTelefonos = "DELETE FROM telefono_duenio WHERE id_duenio=?";
+
+            try (PreparedStatement cmdTelefono = con.prepareStatement(sqlEliminarTelefonos)) {
+                cmdTelefono.setInt(1, duenio.getIdDueno());
+                cmdTelefono.executeUpdate();
+            }
+
+            // Insertamos los teléfonos actuales
+            String sqlInsertarTelefono = "INSERT INTO telefono_duenio (telefono, id_duenio) VALUES (?, ?)";
+
+            try (PreparedStatement cmdTelefono = con.prepareStatement(sqlInsertarTelefono)) {
+
+                if (duenio.getTelefonos() != null) {
+
+                    for (String telefono : duenio.getTelefonos()) {
+                        cmdTelefono.setString(1, telefono);
+                        cmdTelefono.setInt(2, duenio.getIdDueno());
+                        cmdTelefono.executeUpdate();
+                    }
+                }
+            }
+
+            return true;
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("Error al actualizar dueño: " + ex.getMessage());
         }
 
         return false;
@@ -73,19 +126,28 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public boolean eliminar(int id) {
 
-        String sql = "DELETE FROM dueno WHERE id_duenio=?";
+        String sqlTelefono = "DELETE FROM telefono_duenio WHERE id_duenio=?";
 
-        try (Connection con = this.conexion.crearConexionBD();
-             PreparedStatement cmd = con.prepareStatement(sql)) {
+        String sqlDueno = "DELETE FROM duenio WHERE id_duenio=?";
 
-            cmd.setInt(1, id);
+        try (Connection con = this.conexion.crearConexionBD()) {
 
-            int res = cmd.executeUpdate();
+            //Eliminamos sus teléfonos
+            try (PreparedStatement cmdTelefono = con.prepareStatement(sqlTelefono)) {
+                cmdTelefono.setInt(1, id);
+                cmdTelefono.executeUpdate();
+            }
 
-            return res > 0;
+            //Eliminamos al dueño
+            try (PreparedStatement cmd = con.prepareStatement(sqlDueno)) {
+                cmd.setInt(1, id);
+                int res = cmd.executeUpdate();
+
+                return res > 0;
+            }
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("Error al eliminar dueño: " + ex.getMessage());
         }
 
         return false;
@@ -94,10 +156,10 @@ public class DuenioDAO implements IDuenioDAO{
     @Override
     public Duenio consultar(int id) {
 
-        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM dueno WHERE id_duenio=?";
+        String sql = "SELECT id_duenio, nombre, apellidoP, apellidoM, direccion, email FROM duenio WHERE id_duenio=?";
 
         try (Connection con = this.conexion.crearConexionBD();
-             PreparedStatement cmd = con.prepareStatement(sql)) {
+            PreparedStatement cmd = con.prepareStatement(sql)) {
 
             cmd.setInt(1, id);
 
@@ -114,11 +176,27 @@ public class DuenioDAO implements IDuenioDAO{
                 duenio.setDireccion(rs.getString("direccion"));
                 duenio.setEmail(rs.getString("email"));
 
+                List<String> telefonos = new ArrayList<>();
+
+                String sqlTelefonos = "SELECT telefono FROM telefono_duenio WHERE id_duenio=?";
+
+                try (PreparedStatement cmdTelefonos = con.prepareStatement(sqlTelefonos)) {
+
+                    cmdTelefonos.setInt(1, id);
+                    ResultSet rsTelefonos = cmdTelefonos.executeQuery();
+
+                    while (rsTelefonos.next()) {
+                        telefonos.add(rsTelefonos.getString("telefono"));
+                    }
+                }
+
+                duenio.setTelefonos(telefonos);
+
                 return duenio;
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("Error al consultar dueño: " + ex.getMessage());
         }
 
         return null;
@@ -129,10 +207,10 @@ public class DuenioDAO implements IDuenioDAO{
 
         List<Duenio> lista = new ArrayList<>();
 
-        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM duenio";
+        String sql = "SELECT id_duenio, nombre, apellidoP, apellidoM, direccion, email FROM duenio";
 
         try (Connection con = this.conexion.crearConexionBD();
-             PreparedStatement cmd = con.prepareStatement(sql)) {
+            PreparedStatement cmd = con.prepareStatement(sql)) {
 
             ResultSet rs = cmd.executeQuery();
 
@@ -147,11 +225,27 @@ public class DuenioDAO implements IDuenioDAO{
                 duenio.setDireccion(rs.getString("direccion"));
                 duenio.setEmail(rs.getString("email"));
 
+                List<String> telefonos = new ArrayList<>();
+
+                String sqlTelefonos = "SELECT telefono FROM telefono_duenio WHERE id_duenio=?";
+
+                try (PreparedStatement cmdTelefonos = con.prepareStatement(sqlTelefonos)) {
+
+                    cmdTelefonos.setInt(1, duenio.getIdDueno());
+                    ResultSet rsTelefonos = cmdTelefonos.executeQuery();
+
+                    while (rsTelefonos.next()) {
+                        telefonos.add(rsTelefonos.getString("telefono"));
+                    }
+                }
+
+                duenio.setTelefonos(telefonos);
+
                 lista.add(duenio);
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("Error al consultar dueños: " + ex.getMessage());
         }
 
         return lista;
