@@ -128,7 +128,7 @@ public class DialogMascota extends JDialog {
         gbc.gridx = 1;
         gbc.weightx = 1.0;
 
-        comboSexo = new JComboBox<>(new String[]{"Macho", "Hembra"});
+        comboSexo = new JComboBox<>(new String[]{"M", "F"});
 
         panelContenido.add(comboSexo, gbc);
 
