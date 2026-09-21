@@ -8,30 +8,59 @@ import Presentacion.Componentes.CampoBusqueda;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Diálogo modal para registrar o modificar un veterinario. Contiene campos
+ * para nombre, apellidos, cédula profesional, especialidad y teléfono.
+ *
+ * @author ACER
+ */
 public class DialogVeterinario extends JDialog {
 
+    /** Campo de nombre. */
     private CampoBusqueda campoNombre;
+
+    /** Campo de apellido paterno. */
     private CampoBusqueda campoApellidoP;
+
+    /** Campo de apellido materno. */
     private CampoBusqueda campoApellidoM;
+
+    /** Campo de cédula profesional. */
     private CampoBusqueda campoCedula;
+
+    /** Campo de teléfono. */
     private CampoBusqueda campoTelefono;
 
+    /** Combo de especialidades. */
     private JComboBox<Especialidad> comboEspecialidad;
 
+    /** Botón para aceptar el diálogo. */
     private Boton botonAceptar;
+
+    /** Botón para cancelar el diálogo. */
     private Boton botonCancelar;
 
+    /** Indica si el usuario aceptó el diálogo. */
     private boolean aceptado = false;
+
+    /** Veterinario que se está creando o modificando. */
     private Veterinario veterinario;
 
-    //Constructor para agregar
-
+    /**
+     * Constructor para registrar un nuevo veterinario.
+     *
+     * @param owner ventana padre del diálogo.
+     */
     public DialogVeterinario(Frame owner) {
         this(owner, null);
     }
 
-    //Constructor para agregar/modificar
-
+    /**
+     * Constructor para registrar o modificar un veterinario existente.
+     *
+     * @param owner ventana padre del diálogo.
+     * @param veterinario veterinario a modificar, o {@code null} para uno nuevo.
+     */
     public DialogVeterinario(Frame owner, Veterinario veterinario) {
 
         super(owner, true);
@@ -53,8 +82,10 @@ public class DialogVeterinario extends JDialog {
         setVisible(true);
     }
 
-    //Componentes
-
+    /**
+     * Construye todos los componentes gráficos del diálogo y configura
+     * los eventos de los botones.
+     */
     public void iniciarComponentes() {
 
         setLayout(new BorderLayout(5, 5));
@@ -164,7 +195,7 @@ public class DialogVeterinario extends JDialog {
         add(panelContenido, BorderLayout.CENTER);
 
         //Botones
-        
+
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
         botonCancelar = new Boton("Cancelar");
@@ -185,8 +216,10 @@ public class DialogVeterinario extends JDialog {
         });
     }
 
-    //Aceptar
-
+    /**
+     * Valida los campos del formulario, construye el objeto {@link Veterinario}
+     * y marca el diálogo como aceptado si todo es correcto.
+     */
     private void aceptar() {
 
         //Validar nombre
@@ -265,8 +298,10 @@ public class DialogVeterinario extends JDialog {
         dispose();
     }
 
-    //Cargar datos para modificar
-
+    /**
+     * Carga los datos de un veterinario existente en los campos del formulario,
+     * para el modo modificación.
+     */
     private void cargarDatos() {
 
         campoNombre.setText(veterinario.getNombre());
@@ -286,19 +321,27 @@ public class DialogVeterinario extends JDialog {
             Especialidad especialidad = comboEspecialidad.getItemAt(i);
 
             if (especialidad.toString().equalsIgnoreCase(especialidadGuardada)) {
-                
+
                 comboEspecialidad.setSelectedIndex(i);
                 break;
             }
         }
     }
 
-    //Getters
-
+    /**
+     * Indica si el usuario aceptó el diálogo.
+     *
+     * @return {@code true} si se aceptó, {@code false} en caso contrario.
+     */
     public boolean isAceptado() {
         return aceptado;
     }
 
+    /**
+     * Devuelve el veterinario construido o modificado en el diálogo.
+     *
+     * @return el objeto {@link Veterinario}.
+     */
     public Veterinario getVeterinario() {
         return veterinario;
     }

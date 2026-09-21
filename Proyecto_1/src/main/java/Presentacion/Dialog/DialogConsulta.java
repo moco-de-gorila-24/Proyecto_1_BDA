@@ -18,31 +18,66 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Diálogo modal para registrar o modificar una consulta veterinaria. Contiene
+ * campos para fecha, hora, motivo, diagnóstico, tratamiento, costo, selección
+ * de mascota y selección de veterinario.
+ *
+ * @author ACER
+ */
 public class DialogConsulta extends JDialog {
 
+    /** Campo de costo. */
     private CampoBusqueda campoCosto;
 
+    /** Área de texto para el motivo. */
     private JTextArea areaMotivo;
+
+    /** Área de texto para el diagnóstico. */
     private JTextArea areaDiagnostico;
+
+    /** Área de texto para el tratamiento. */
     private JTextArea areaTratamiento;
 
+    /** Selector de fecha. */
     private DatePicker datePickerFecha;
+
+    /** Selector de hora. */
     private TimePicker timePickerHora;
 
+    /** Combo de mascotas. */
     private JComboBox<Mascota> comboMascota;
+
+    /** Combo de veterinarios. */
     private JComboBox<Veterinario> comboVeterinario;
 
+    /** Botón para aceptar el diálogo. */
     private Boton botonAceptar;
+
+    /** Botón para cancelar el diálogo. */
     private Boton botonCancelar;
 
+    /** Indica si el usuario aceptó el diálogo. */
     private boolean aceptado = false;
 
+    /** Consulta que se está creando o modificando. */
     private Consulta consulta;
 
+    /**
+     * Constructor para registrar una nueva consulta.
+     *
+     * @param owner ventana padre del diálogo.
+     */
     public DialogConsulta(Frame owner) {
         this(owner, null);
     }
 
+    /**
+     * Constructor para registrar o modificar una consulta existente.
+     *
+     * @param owner ventana padre del diálogo.
+     * @param consulta consulta a modificar, o {@code null} para una nueva.
+     */
     public DialogConsulta(Frame owner, Consulta consulta) {
         super(owner, true);
 
@@ -65,6 +100,10 @@ public class DialogConsulta extends JDialog {
         setVisible(true);
     }
 
+    /**
+     * Construye todos los componentes gráficos del diálogo y configura
+     * los eventos de los botones.
+     */
     private void iniciarComponentes() {
 
         setLayout(new BorderLayout(10, 10));
@@ -232,7 +271,7 @@ public class DialogConsulta extends JDialog {
         add(panelBotones, BorderLayout.SOUTH);
 
         //Eventos
-        
+
         botonCancelar.addActionListener(e -> {
             aceptado = false;
             dispose();
@@ -241,8 +280,10 @@ public class DialogConsulta extends JDialog {
         botonAceptar.addActionListener(e -> aceptar());
     }
 
-    //Cargar mascotas
-
+    /**
+     * Carga todas las mascotas en el combo de selección, con un renderer
+     * personalizado que muestra id, nombre y especie.
+     */
     private void cargarMascotas() {
 
         MascotaDAO mascotaDAO = new MascotaDAO();
@@ -274,8 +315,10 @@ public class DialogConsulta extends JDialog {
         });
     }
 
-    //Cargar veterinarios
-
+    /**
+     * Carga todos los veterinarios en el combo de selección, con un renderer
+     * personalizado que muestra id, nombre y apellido paterno.
+     */
     private void cargarVeterinarios() {
 
         VeterinarioDAO veterinarioDAO = new VeterinarioDAO();
@@ -308,8 +351,10 @@ public class DialogConsulta extends JDialog {
         );
     }
 
-    //Cargar datos para modificar
-
+    /**
+     * Carga los datos de una consulta existente en los campos del formulario,
+     * para el modo modificación.
+     */
     private void cargarDatosConsulta() {
 
         if (consulta.getFechaHora() != null) {
@@ -354,8 +399,10 @@ public class DialogConsulta extends JDialog {
         }
     }
 
-    //Validar y aceptar
-
+    /**
+     * Valida los campos del formulario, construye el objeto {@link Consulta}
+     * y marca el diálogo como aceptado si todo es correcto.
+     */
     private void aceptar() {
 
         //Fecha
@@ -462,12 +509,20 @@ public class DialogConsulta extends JDialog {
         dispose();
     }
 
-    //Getters
-
+    /**
+     * Indica si el usuario aceptó el diálogo.
+     *
+     * @return {@code true} si se aceptó, {@code false} en caso contrario.
+     */
     public boolean isAceptado() {
         return aceptado;
     }
 
+    /**
+     * Devuelve la consulta construida o modificada en el diálogo.
+     *
+     * @return el objeto {@link Consulta}.
+     */
     public Consulta getConsulta() {
         return consulta;
     }

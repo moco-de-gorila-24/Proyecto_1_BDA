@@ -14,22 +14,40 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
-
+/**
+ * Panel que muestra el listado de veterinarios registrados y permite realizar
+ * operaciones CRUD sobre ellos (agregar, modificar y eliminar), además de
+ * filtrarlos mediante un campo de búsqueda en vivo.
+ *
+ * @author ACER
+ */
 public class PanelVeterinarios extends JPanel {
 
+    /** Panel con scroll que contiene la tabla de veterinarios. */
     private JScrollPane jscrollPane;
+
+    /** Panel lateral que contiene los botones de acción. */
     private JPanel panelDerecha;
+
+    /** Panel que contiene el campo de búsqueda y la tabla. */
     private JPanel panelTabla;
 
+    /** Campo de búsqueda en vivo. */
     private CampoBusqueda campoBusqueda;
 
+    /** Modelo de datos de la tabla. */
     private DefaultTableModel modelo;
+
+    /** Tabla que muestra los veterinarios. */
     private Tabla tabla;
 
+    /** DAO para operaciones sobre veterinarios. */
     private VeterinarioDAO veterinarioDAO;
 
-    //Constructor
-
+    /**
+     * Constructor que inicializa el DAO, construye la interfaz gráfica,
+     * carga los veterinarios desde la base de datos y configura los eventos.
+     */
     public PanelVeterinarios() {
 
         veterinarioDAO = new VeterinarioDAO();
@@ -147,8 +165,10 @@ public class PanelVeterinarios extends JPanel {
         btnEliminar.addActionListener(e -> eliminarVeterinario());
     }
 
-    //Cargar veterinarios
-
+    /**
+     * Carga todos los veterinarios desde la base de datos y los inserta en el
+     * modelo de la tabla.
+     */
     private void cargarVeterinarios() {
 
         modelo.setRowCount(0);
@@ -161,8 +181,10 @@ public class PanelVeterinarios extends JPanel {
         }
     }
 
-    //Agregar veterinario
-
+     /**
+     * Abre el diálogo de registro de veterinario. Si el usuario acepta, inserta
+     * el veterinario en la base de datos y recarga la tabla.
+     */
     private void agregarVeterinario() {
 
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -184,8 +206,11 @@ public class PanelVeterinarios extends JPanel {
         }
     }
 
-    //Modificar veterinario
-
+    /**
+     * Abre el diálogo de modificación con los datos del veterinario seleccionado.
+     * Si el usuario acepta, actualiza el veterinario en la base de datos y
+     * recarga la tabla.
+     */
     private void modificarVeterinario() {
 
         int filaVista = tabla.getSelectedRow();
@@ -227,8 +252,10 @@ public class PanelVeterinarios extends JPanel {
         }
     }
 
-    //Eliminar veterinario
-
+    /**
+     * Elimina el veterinario seleccionado, previa confirmación del usuario, y
+     * recarga la tabla.
+     */
     private void eliminarVeterinario() {
 
         int filaVista = tabla.getSelectedRow();
@@ -265,8 +292,10 @@ public class PanelVeterinarios extends JPanel {
         }
     }
 
-    //Filtrar
-
+     /**
+     * Filtra las filas de la tabla según el texto ingresado en el campo de
+     * búsqueda, aplicando un {@link TableRowSorter}.
+     */
     private void filtrar() {
 
         String texto = campoBusqueda.getText().trim();

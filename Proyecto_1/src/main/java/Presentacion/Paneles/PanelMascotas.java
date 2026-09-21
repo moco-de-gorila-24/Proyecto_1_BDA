@@ -18,20 +18,40 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+/**
+ * Panel que muestra el listado de mascotas registradas y permite realizar
+ * operaciones CRUD sobre ellas (agregar, modificar y eliminar), además de
+ * filtrarlas mediante un campo de búsqueda en vivo.
+ *
+ * @author ACER
+ */
 public class PanelMascotas extends JPanel {
 
+    /** Panel con scroll que contiene la tabla de mascotas. */
     private JScrollPane jscrollPane;
+
+    /** Panel lateral que contiene los botones de acción. */
     private JPanel panelDerecha;
+
+    /** Panel que contiene el campo de búsqueda y la tabla. */
     private JPanel panelTabla;
 
+    /** Campo de búsqueda en vivo. */
     private CampoBusqueda campoBusqueda;
 
+    /** Modelo de datos de la tabla. */
     private DefaultTableModel modelo;
+
+    /** Tabla que muestra las mascotas. */
     private Tabla tabla;
 
+    /** DAO para operaciones sobre mascotas. */
     private MascotaDAO mascotaDAO;
 
+    /**
+     * Constructor que inicializa el DAO, construye la interfaz gráfica,
+     * carga las mascotas desde la base de datos y configura los eventos.
+     */
     public PanelMascotas() {
 
         mascotaDAO = new MascotaDAO();
@@ -155,8 +175,11 @@ public class PanelMascotas extends JPanel {
         btnEliminar.addActionListener(e -> eliminarMascota());
     }
 
-    //Cargar mascotas
-
+   
+    /**
+     * Carga todas las mascotas desde la base de datos y las inserta en el modelo
+     * de la tabla, calculando la edad a partir de la fecha de nacimiento.
+     */
     private void cargarMascotas() {
 
         modelo.setRowCount(0);
@@ -169,8 +192,11 @@ public class PanelMascotas extends JPanel {
         }
     }
 
-    //Agregar mascota
-
+   
+    /**
+     * Abre el diálogo de registro de mascota. Si el usuario acepta, inserta la
+     * mascota en la base de datos y recarga la tabla.
+     */
     private void agregarMascota() {
 
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -194,8 +220,12 @@ public class PanelMascotas extends JPanel {
         }
     }
 
-    //Modificar mascota
-
+    
+    /**
+     * Abre el diálogo de modificación con los datos de la mascota seleccionada.
+     * Si el usuario acepta, actualiza la mascota en la base de datos y recarga
+     * la tabla.
+     */
     private void modificarMascota() {
 
         int filaVista = tabla.getSelectedRow();
@@ -240,8 +270,10 @@ public class PanelMascotas extends JPanel {
         }
     }
 
-    //Eliminar mascota
-
+    /**
+     * Elimina la mascota seleccionada, previa confirmación del usuario, y
+     * recarga la tabla.
+     */
     private void eliminarMascota() {
 
         int filaVista = tabla.getSelectedRow();
@@ -274,8 +306,10 @@ public class PanelMascotas extends JPanel {
         }
     }
 
-    //Filtrar
-
+    /**
+     * Filtra las filas de la tabla según el texto ingresado en el campo de
+     * búsqueda, aplicando un {@link TableRowSorter}.
+     */
     private void filtrar() {
 
         String texto = campoBusqueda.getText().trim();
@@ -292,8 +326,12 @@ public class PanelMascotas extends JPanel {
         }
     }
 
-    //Calcular edad
-
+     /**
+     * Calcula la edad en años de una mascota a partir de su fecha de nacimiento.
+     *
+     * @param fechaNacimiento fecha de nacimiento de la mascota.
+     * @return la edad en años, o 0 si la fecha es nula.
+     */
     private int calcularEdad(Date fechaNacimiento) {
 
         if (fechaNacimiento == null) {
