@@ -23,7 +23,7 @@ public class ConexionDB implements IConexion{
     public String user = "root";
     
     /** Contraseña del usuario de la base de datos. */
-    public String pass = "Pp009o12!";
+    public String pass = "ITSON";
     
     /** Cadena de conexión JDBC utilizada para conectarse a la base de datos. */
     public String cadenaConexion;
@@ -46,7 +46,7 @@ public class ConexionDB implements IConexion{
      */
     public ConexionDB() {
         this.user = "root";
-        this.pass = "Pp009o12!";
+        this.pass = "LMayli77";
         this.cadenaConexion = "jdbc:mysql://localhost:3306/veterinaria";
     }
 
