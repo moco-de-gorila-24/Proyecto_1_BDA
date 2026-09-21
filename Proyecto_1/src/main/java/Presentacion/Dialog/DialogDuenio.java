@@ -9,30 +9,71 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Diálogo modal para registrar o modificar un dueño. Contiene campos para
+ * nombre, apellidos, dirección, email y una lista dinámica de teléfonos.
+ *
+ * @author ACER
+ */
 public class DialogDuenio extends JDialog {
 
+    /** Campo de nombre. */
     private CampoBusqueda campoNombre;
+
+    /** Campo de apellido paterno. */
     private CampoBusqueda campoApellidoP;
+
+    /** Campo de apellido materno. */
     private CampoBusqueda campoApellidoM;
+
+    /** Campo de dirección. */
     private CampoBusqueda campoDireccion;
+
+    /** Campo de email. */
     private CampoBusqueda campoEmail;
+
+    /** Campo de teléfono. */
     private CampoBusqueda campoTelefono;
 
+    /** Modelo de la lista de teléfonos. */
     private DefaultListModel<String> modeloTelefonos;
+
+    /** Lista visual de teléfonos. */
     private JList<String> listaTelefonos;
 
+    /** Botón para agregar un teléfono a la lista. */
     private Boton botonAgregarTelefono;
+
+    /** Botón para eliminar un teléfono de la lista. */
     private Boton botonEliminarTelefono;
+
+    /** Botón para aceptar el diálogo. */
     private Boton botonAceptar;
+
+    /** Botón para cancelar el diálogo. */
     private Boton botonCancelar;
 
+    /** Indica si el usuario aceptó el diálogo. */
     private boolean aceptado = false;
+
+    /** Dueño que se está creando o modificando. */
     private Duenio duenio;
 
+    /**
+     * Constructor para registrar un nuevo dueño.
+     *
+     * @param owner ventana padre del diálogo.
+     */
     public DialogDuenio(Frame owner) {
         this(owner, null);
     }
 
+    /**
+     * Constructor para registrar o modificar un dueño existente.
+     *
+     * @param owner ventana padre del diálogo.
+     * @param duenio dueño a modificar, o {@code null} para uno nuevo.
+     */
     public DialogDuenio(Frame owner, Duenio duenio) {
         super(owner, true);
 
@@ -52,6 +93,10 @@ public class DialogDuenio extends JDialog {
         setVisible(true);
     }
 
+    /**
+     * Construye todos los componentes gráficos del diálogo y configura
+     * los eventos de los botones.
+     */
     public void iniciarComponentes() {
 
         setLayout(new BorderLayout(5, 5));
@@ -219,8 +264,9 @@ public class DialogDuenio extends JDialog {
         });
     }
 
-    //Agregar telefono
-
+    /**
+     * Valida y agrega el teléfono actual a la lista de teléfonos del dueño.
+     */
     private void agregarTelefono() {
 
         String telefono = campoTelefono.getText().trim();
@@ -241,8 +287,9 @@ public class DialogDuenio extends JDialog {
         campoTelefono.setText("");
     }
 
-    //Eliminar telefono
-
+    /**
+     * Elimina el teléfono seleccionado de la lista.
+     */
     private void eliminarTelefono() {
 
         int indice = listaTelefonos.getSelectedIndex();
@@ -256,8 +303,10 @@ public class DialogDuenio extends JDialog {
         modeloTelefonos.remove(indice);
     }
 
-    //Aceptar
-
+    /**
+     * Valida los campos del formulario, construye el objeto {@link Duenio}
+     * y marca el diálogo como aceptado si todo es correcto.
+     */
     private void aceptar() {
 
         if (campoNombre.getText().trim().isEmpty()) {
@@ -312,8 +361,10 @@ public class DialogDuenio extends JDialog {
         dispose();
     }
 
-    //Cargar datos para modificar
-
+    /**
+     * Carga los datos de un dueño existente en los campos del formulario,
+     * para el modo modificación.
+     */
     private void cargarDatos() {
 
         campoNombre.setText(duenio.getNombre());
@@ -332,12 +383,20 @@ public class DialogDuenio extends JDialog {
         }
     }
 
-    //Getters
-
+    /**
+     * Indica si el usuario aceptó el diálogo.
+     *
+     * @return {@code true} si se aceptó, {@code false} en caso contrario.
+     */
     public boolean isAceptado() {
         return aceptado;
     }
 
+    /**
+     * Devuelve el dueño construido o modificado en el diálogo.
+     *
+     * @return el objeto {@link Duenio}.
+     */
     public Duenio getDuenio() {
         return duenio;
     }

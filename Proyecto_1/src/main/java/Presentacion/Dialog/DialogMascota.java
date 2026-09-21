@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Presentacion.Dialog;
 
 import DAO.DuenioDAO;
@@ -16,28 +12,59 @@ import java.awt.*;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * Diálogo modal para registrar o modificar una mascota. Contiene campos para
+ * nombre, especie, fecha de nacimiento, sexo, raza y selección de dueño.
+ *
+ * @author ACER
+ */
 public class DialogMascota extends JDialog {
 
+    /** Campo de nombre de la mascota. */
     private CampoBusqueda campoNombre;
+
+    /** Campo de especie. */
     private CampoBusqueda campoEspecie;
+
+    /** Campo de raza. */
     private CampoBusqueda campoRaza;
 
+    /** Selector de fecha de nacimiento. */
     private DatePicker datePickerFechaNacimiento;
 
+    /** Combo de sexo. */
     private JComboBox<String> comboSexo;
+
+    /** Combo de dueños. */
     private JComboBox<Duenio> comboDueno;
 
+    /** Botón para aceptar el diálogo. */
     private Boton botonAceptar;
+
+    /** Botón para cancelar el diálogo. */
     private Boton botonCancelar;
 
+    /** Indica si el usuario aceptó el diálogo. */
     private boolean aceptado = false;
 
+    /** Mascota que se está creando o modificando. */
     private Mascota mascota;
 
+    /**
+     * Constructor para registrar una nueva mascota.
+     *
+     * @param owner ventana padre del diálogo.
+     */
     public DialogMascota(Frame owner) {
         this(owner, null);
     }
 
+    /**
+     * Constructor para registrar o modificar una mascota existente.
+     *
+     * @param owner ventana padre del diálogo.
+     * @param mascota mascota a modificar, o {@code null} para una nueva.
+     */
     public DialogMascota(Frame owner, Mascota mascota) {
         super(owner, true);
 
@@ -58,6 +85,10 @@ public class DialogMascota extends JDialog {
         setVisible(true);
     }
 
+    /**
+     * Construye todos los componentes gráficos del diálogo y configura
+     * los eventos de los botones.
+     */
     private void iniciarComponentes() {
 
         setLayout(new BorderLayout(10, 10));
@@ -71,7 +102,6 @@ public class DialogMascota extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        
         //Nombre
 
         gbc.gridx = 0;
@@ -185,9 +215,10 @@ public class DialogMascota extends JDialog {
 
     }
 
-
-    //Cargar dueños en el combobox
-
+    /**
+     * Carga todos los dueños en el combo de selección, con un renderer
+     * personalizado que muestra id, nombre y apellidos.
+     */
     private void cargarDuenios() {
 
         DuenioDAO duenioDAO = new DuenioDAO();
@@ -219,9 +250,10 @@ public class DialogMascota extends JDialog {
         });
     }
 
-
-    //Cargar datos para modificar
-
+    /**
+     * Carga los datos de una mascota existente en los campos del formulario,
+     * para el modo modificación.
+     */
     private void cargarDatosMascota() {
 
         campoNombre.setText(mascota.getNombre());
@@ -229,12 +261,12 @@ public class DialogMascota extends JDialog {
         campoRaza.setText(mascota.getRaza());
 
         if (mascota.getFechaNacimiento() != null) {
-            
+
             datePickerFechaNacimiento.setDate(mascota.getFechaNacimiento().toLocalDate());
         }
 
         if (mascota.getSexo() != null) {
-            
+
             comboSexo.setSelectedItem(mascota.getSexo());
         }
 
@@ -250,9 +282,10 @@ public class DialogMascota extends JDialog {
         }
     }
 
-
-    //Validar y aceptar
-
+    /**
+     * Valida los campos del formulario, construye el objeto {@link Mascota}
+     * y marca el diálogo como aceptado si todo es correcto.
+     */
     private void aceptar() {
 
         if (campoNombre.getText().trim().isEmpty()) {
@@ -309,21 +342,18 @@ public class DialogMascota extends JDialog {
             return;
         }
 
-
-        //Crear/Actualizar mascota
-
         if (mascota == null) {
             mascota = new Mascota();
         }
 
         mascota.setNombre(campoNombre.getText().trim());
-        
+
         mascota.setEspecie(campoEspecie.getText().trim());
-        
+
         mascota.setFechaNacimiento(Date.valueOf(datePickerFechaNacimiento.getDate()));
-        
+
         mascota.setSexo(comboSexo.getSelectedItem().toString());
-        
+
         mascota.setRaza(campoRaza.getText().trim());
 
         Duenio duenioSeleccionado = (Duenio) comboDueno.getSelectedItem();
@@ -334,12 +364,20 @@ public class DialogMascota extends JDialog {
         dispose();
     }
 
-    //Getters
-
+    /**
+     * Indica si el usuario aceptó el diálogo.
+     *
+     * @return {@code true} si se aceptó, {@code false} en caso contrario.
+     */
     public boolean isAceptado() {
         return aceptado;
     }
 
+    /**
+     * Devuelve la mascota construida o modificada en el diálogo.
+     *
+     * @return el objeto {@link Mascota}.
+     */
     public Mascota getMascota() {
         return mascota;
     }

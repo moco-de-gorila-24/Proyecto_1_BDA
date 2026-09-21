@@ -193,7 +193,7 @@ public class DuenioDAO implements IDuenioDAO {
     @Override
     public Duenio consultar(int id) {
 
-        String sql = "SELECT id_duenio, nombre, apellidoP, apellidoM, direccion, email FROM duenio WHERE id_duenio=?";
+        String sql = "SELECT id_dueno, nombre, apellidoP, apellidoM, direccion, email FROM duenio WHERE id_duenio=?";
 
         try (Connection con = this.conexion.crearConexionBD();
             PreparedStatement cmd = con.prepareStatement(sql)) {
@@ -248,7 +248,7 @@ public class DuenioDAO implements IDuenioDAO {
 
         List<Duenio> lista = new ArrayList<>();
 
-        String sql = "SELECT id_duenio, nombre, apellidoP, apellidoM, direccion, email FROM duenio";
+        String sql = "SELECT id_duenio, nombre, apellidoP, apellidoM, direccion, email FROM dueno";
 
         try (Connection con = this.conexion.crearConexionBD();
             PreparedStatement cmd = con.prepareStatement(sql)) {
