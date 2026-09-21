@@ -23,7 +23,7 @@ public class MascotaDAO implements IMascotaDAO{
     @Override
     public boolean insertar(Mascota mascota) {
 
-        String sql = "INSERT INTO mascota (nombre, especie, fecha_nacimiento, sexo, raza, id_dueno) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO mascota (nombre, especie, fecha_nacimiento, sexo, raza, id_duenio) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = this.conexion.crearConexionBD();
              PreparedStatement cmd = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
@@ -52,7 +52,7 @@ public class MascotaDAO implements IMascotaDAO{
     @Override
     public boolean actualizar(Mascota mascota) {
 
-        String sql = "UPDATE mascota SET nombre = ?, especie = ?, fecha_nacimiento = ?, sexo = ?, raza = ?, id_dueno = ? WHERE id_mascota = ?";
+        String sql = "UPDATE mascota SET nombre = ?, especie = ?, fecha_nacimiento = ?, sexo = ?, raza = ?, id_duenio = ? WHERE id_mascota = ?";
 
         try (Connection con = this.conexion.crearConexionBD();
              PreparedStatement cmd = con.prepareStatement(sql)){
@@ -122,7 +122,7 @@ public class MascotaDAO implements IMascotaDAO{
                 mascota.setFechaNacimiento(res.getDate("fecha_nacimiento"));
                 mascota.setSexo(res.getString("sexo"));
                 mascota.setRaza(res.getString("raza"));
-                mascota.setIdDueno(res.getInt("id_dueno"));
+                mascota.setIdDueno(res.getInt("id_duenio"));
 
                 res.close();
                 cmd.close();
@@ -164,7 +164,7 @@ public class MascotaDAO implements IMascotaDAO{
                 mascota.setFechaNacimiento(res.getDate("fecha_nacimiento"));
                 mascota.setSexo(res.getString("sexo"));
                 mascota.setRaza(res.getString("raza"));
-                mascota.setIdDueno(res.getInt("id_dueno"));
+                mascota.setIdDueno(res.getInt("id_duenio"));
 
                 lista.add(mascota);
             }

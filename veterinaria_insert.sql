@@ -7,7 +7,7 @@ INSERT INTO duenio (nombre, apellidoP, apellidoM, direccion, email) VALUES
 ('Ana', 'Martínez', 'Flores', 'Calle Guerrero #321', 'ana.martinez@gmail.com'),
 ('Luis', 'Gómez', 'Valenzuela', 'Av. Tecnológico #555', 'luis.gomez@gmail.com');
 
-INSERT INTO telefono_dueno (telefono, id_duenio) VALUES
+INSERT INTO telefono_duenio (telefono, id_duenio) VALUES
 ('6441234567', 1),
 ('6449876543', 1),
 ('6442345678', 2),
@@ -22,7 +22,7 @@ INSERT INTO veterinario (nombre, apellidoP, apellidoM, cedula_profesional, espec
 ('Pedro', 'López', 'García', 'VET345678', 'Cirugía', '6443334455'),
 ('Sofía', 'Torres', 'Hernández', 'VET456789', 'Medicina interna', '6444445566');
 
-INSERT INTO mascota (nombre, especie, fecha_nacimiento, sexo, raza, id_dueno) VALUES
+INSERT INTO mascota (nombre, especie, fecha_nacimiento, sexo, raza, id_duenio) VALUES
 ('Max', 'Perro', '2020-05-15', 'M', 'Labrador', 1),
 ('Luna', 'Gato', '2021-08-20', 'F', 'Siamés', 1),
 ('Rocky', 'Perro', '2019-03-10', 'M', 'Pastor alemán', 2),
