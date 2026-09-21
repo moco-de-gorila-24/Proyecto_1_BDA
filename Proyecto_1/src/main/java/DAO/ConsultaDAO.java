@@ -13,12 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación concreta de {@link IConsultaDAO} que gestiona el acceso a datos
+ * de la tabla {@code consulta} en la base de datos veterinaria.
+ * <p>
+ * Cada método abre y cierra su propia conexión JDBC mediante {@link ConexionDB}.
+ * </p>
  *
  * @author ACER
  */
 public class ConsultaDAO implements IConsultaDAO {
+    /** Objeto de conexión a la base de datos. */
     private ConexionDB conexion = new ConexionDB();
-
+    
+    /**
+     * Inserta una nueva consulta en la tabla {@code consulta}.
+     *
+     * @param consulta objeto {@link Consulta} con los datos a registrar.
+     * @return {@code true} si la inserción fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean insertar(Consulta consulta) {
 
@@ -47,7 +59,13 @@ public class ConsultaDAO implements IConsultaDAO {
             return false;
         }
     }
-
+    
+    /**
+     * Actualiza los datos de una consulta existente identificada por {@code id_consulta}.
+     *
+     * @param consulta objeto {@link Consulta} con los datos actualizados.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean actualizar(Consulta consulta) {
 
@@ -77,7 +95,12 @@ public class ConsultaDAO implements IConsultaDAO {
             return false;
         }
     }
-
+    /**
+     * Elimina una consulta de la tabla {@code consulta} por su identificador.
+     *
+     * @param id identificador único de la consulta.
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean eliminar(int id) {
 
@@ -99,7 +122,12 @@ public class ConsultaDAO implements IConsultaDAO {
             return false;
         }
     }
-
+     /**
+     * Consulta una consulta específica por su identificador.
+     *
+     * @param id identificador único de la consulta.
+     * @return el objeto {@link Consulta} encontrado, o {@code null} si no existe.
+     */
     @Override
     public Consulta consultar(int id) {
 
@@ -142,7 +170,11 @@ public class ConsultaDAO implements IConsultaDAO {
 
         return null;
     }
-
+     /**
+     * Recupera todas las consultas registradas en la base de datos.
+     *
+     * @return una lista con todas las consultas.
+     */
     @Override
     public List<Consulta> consultarTodos() {
 

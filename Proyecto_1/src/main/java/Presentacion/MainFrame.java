@@ -9,8 +9,19 @@ import java.awt.*;
 import Presentacion.Paneles.PanelMascotas;
 import Presentacion.Paneles.PanelVeterinarios;
 
+/**
+ * Ventana principal del sistema veterinario. Se encarga de construir la
+ * interfaz gráfica y de permitir la navegación entre los distintos módulos
+ * (Dueños, Mascotas, Veterinarios y Consultas) mediante un {@link CardLayout}.
+ *
+ * @author ACER
+ */
 public class MainFrame extends JFrame {
-
+    
+    /**
+     * Constructor que configura las propiedades básicas de la ventana:
+     * título, tamaño, posición, operación de cierre y redimensionamiento.
+     */
     public MainFrame() {
         setTitle("Main frame");
         setSize(1920, 1080);
@@ -19,6 +30,11 @@ public class MainFrame extends JFrame {
         setResizable(false);
     }
 
+    /**
+     * Construye y muestra la interfaz gráfica principal. Crea los botones de
+     * navegación, los paneles de cada módulo y configura el {@link CardLayout}
+     * para cambiar entre ellos.
+     */
     public void Iniciar(){
         JPanel PanelNorte = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 

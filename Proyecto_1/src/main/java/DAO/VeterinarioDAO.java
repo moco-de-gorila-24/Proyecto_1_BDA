@@ -13,12 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación concreta de {@link IVeterinarioDAO} que gestiona el acceso a datos
+ * de la tabla {@code veterinario} en la base de datos veterinaria.
  *
  * @author ACER
  */
 public class VeterinarioDAO implements IVeterinarioDAO{
+    /** Objeto de conexión a la base de datos. */
     private ConexionDB conexion = new ConexionDB();
 
+    /**
+     * Inserta un nuevo veterinario en la tabla {@code veterinario}.
+     *
+     * @param veterinario objeto {@link Veterinario} con los datos a registrar.
+     * @return {@code true} si la inserción fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean insertar(Veterinario veterinario) {
 
@@ -47,6 +56,12 @@ public class VeterinarioDAO implements IVeterinarioDAO{
         }
     }
 
+    /**
+     * Actualiza los datos de un veterinario existente.
+     *
+     * @param veterinario objeto {@link Veterinario} con los datos actualizados.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean actualizar(Veterinario veterinario) {
 
@@ -76,6 +91,12 @@ public class VeterinarioDAO implements IVeterinarioDAO{
         }
     }
 
+    /**
+     * Elimina un veterinario por su identificador.
+     *
+     * @param id identificador único del veterinario.
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean eliminar(int id) {
 
@@ -97,7 +118,13 @@ public class VeterinarioDAO implements IVeterinarioDAO{
             return false;
         }
     }
-
+    
+    /**
+     * Consulta un veterinario específico por su identificador.
+     *
+     * @param id identificador único del veterinario.
+     * @return el objeto {@link Veterinario} encontrado, o {@code null} si no existe.
+     */
     @Override
     public Veterinario consultar(int id) {
 
@@ -140,6 +167,11 @@ public class VeterinarioDAO implements IVeterinarioDAO{
         return null;
     }
 
+    /**
+     * Recupera todos los veterinarios registrados en la base de datos.
+     *
+     * @return una lista con todos los veterinarios.
+     */
     @Override
     public List<Veterinario> consultarTodos() {
 

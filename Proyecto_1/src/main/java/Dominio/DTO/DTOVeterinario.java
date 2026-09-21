@@ -1,25 +1,54 @@
 package Dominio.DTO;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- *
+
 /**
+ * Objeto de transferencia de datos (DTO) que representa a un veterinario.
+ * Se utiliza para transportar información entre capas sin exponer directamente
+ * la entidad {@link Dominio.Entidades.Veterinario}.
  *
  * @author Luis
  */
 public class DTOVeterinario {
+
+    /** Identificador único del veterinario. */
     private int idVeterinario;
+
+    /** Nombre(s) del veterinario. */
     private String nombre;
+
+    /** Apellido paterno. */
     private String apellidoP;
+
+    /** Apellido materno. */
     private String apellidoM;
+
+    /** Cédula profesional. */
     private String cedulaProfesional;
+
+    /** Especialidad médica. */
     private String especialidad;
+
+    /** Número de teléfono de contacto. */
     private String telefono;
 
+    /**
+     * Constructor por defecto.
+     */
     public DTOVeterinario() {
     }
 
-    public DTOVeterinario(int idVeterinario, String nombre, String apellidoP, String apellidoM, String cedulaProfesional, String especialidad, String telefono) {
+    /**
+     * Constructor parametrizado que inicializa todos los atributos del DTO.
+     *
+     * @param idVeterinario identificador único.
+     * @param nombre nombre(s).
+     * @param apellidoP apellido paterno.
+     * @param apellidoM apellido materno.
+     * @param cedulaProfesional cédula profesional.
+     * @param especialidad especialidad médica.
+     * @param telefono teléfono de contacto.
+     */
+    public DTOVeterinario(int idVeterinario, String nombre, String apellidoP, String apellidoM,
+                          String cedulaProfesional, String especialidad, String telefono) {
         this.idVeterinario = idVeterinario;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
@@ -29,62 +58,53 @@ public class DTOVeterinario {
         this.telefono = telefono;
     }
 
-    public int getIdVeterinario() {
-        return idVeterinario;
-    }
+    /** @return el identificador único del veterinario. */
+    public int getIdVeterinario() { return idVeterinario; }
 
-    public void setIdVeterinario(int idVeterinario) {
-        this.idVeterinario = idVeterinario;
-    }
+    /** @param idVeterinario el nuevo identificador. */
+    public void setIdVeterinario(int idVeterinario) { this.idVeterinario = idVeterinario; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    /** @return el nombre del veterinario. */
+    public String getNombre() { return nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    /** @param nombre el nuevo nombre. */
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getApellidoP() {
-        return apellidoP;
-    }
+    /** @return el apellido paterno. */
+    public String getApellidoP() { return apellidoP; }
 
-    public void setApellidoP(String apellidoP) {
-        this.apellidoP = apellidoP;
-    }
+    /** @param apellidoP el nuevo apellido paterno. */
+    public void setApellidoP(String apellidoP) { this.apellidoP = apellidoP; }
 
-    public String getApellidoM() {
-        return apellidoM;
-    }
+    /** @return el apellido materno. */
+    public String getApellidoM() { return apellidoM; }
 
-    public void setApellidoM(String apellidoM) {
-        this.apellidoM = apellidoM;
-    }
+    /** @param apellidoM el nuevo apellido materno. */
+    public void setApellidoM(String apellidoM) { this.apellidoM = apellidoM; }
 
-    public String getCedulaProfesional() {
-        return cedulaProfesional;
-    }
+    /** @return la cédula profesional. */
+    public String getCedulaProfesional() { return cedulaProfesional; }
 
-    public void setCedulaProfesional(String cedulaProfesional) {
-        this.cedulaProfesional = cedulaProfesional;
-    }
+    /** @param cedulaProfesional la nueva cédula. */
+    public void setCedulaProfesional(String cedulaProfesional) { this.cedulaProfesional = cedulaProfesional; }
 
-    public String getEspecialidad() {
-        return especialidad;
-    }
+    /** @return la especialidad médica. */
+    public String getEspecialidad() { return especialidad; }
 
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
-    }
+    /** @param especialidad la nueva especialidad. */
+    public void setEspecialidad(String especialidad) { this.especialidad = especialidad; }
 
-    public String getTelefono() {
-        return telefono;
-    }
+    /** @return el teléfono de contacto. */
+    public String getTelefono() { return telefono; }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
+    /** @param telefono el nuevo teléfono. */
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
+    /**
+     * Devuelve una representación en texto del DTO con todos sus campos.
+     *
+     * @return cadena con los valores de los atributos.
+     */
     @Override
     public String toString() {
         return "VeterinarioDTO{" + "idVeterinario=" + idVeterinario + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", cedulaProfesional=" + cedulaProfesional + ", especialidad=" + especialidad + ", telefono=" + telefono + '}';

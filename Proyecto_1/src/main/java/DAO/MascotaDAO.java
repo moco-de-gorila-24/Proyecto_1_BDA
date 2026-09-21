@@ -14,12 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación concreta de {@link IMascotaDAO} que gestiona el acceso a datos
+ * de la tabla {@code mascota} en la base de datos veterinaria.
  *
  * @author ACER
  */
 public class MascotaDAO implements IMascotaDAO{
+    /** Objeto de conexión a la base de datos. */
     private ConexionDB conexion = new ConexionDB();
 
+    /**
+     * Inserta una nueva mascota en la tabla {@code mascota}.
+     *
+     * @param mascota objeto {@link Mascota} con los datos a registrar.
+     * @return {@code true} si la inserción fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean insertar(Mascota mascota) {
 
@@ -49,6 +58,12 @@ public class MascotaDAO implements IMascotaDAO{
         }
     }
 
+    /**
+     * Actualiza los datos de una mascota existente.
+     *
+     * @param mascota objeto {@link Mascota} con los datos actualizados.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean actualizar(Mascota mascota) {
 
@@ -77,7 +92,13 @@ public class MascotaDAO implements IMascotaDAO{
             return false;
         }
     }
-
+    
+    /**
+     * Elimina una mascota por su identificador.
+     *
+     * @param id identificador único de la mascota.
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean eliminar(int id) {
 
@@ -100,6 +121,12 @@ public class MascotaDAO implements IMascotaDAO{
         }
     }
 
+    /**
+     * Consulta una mascota específica por su identificador.
+     *
+     * @param id identificador único de la mascota.
+     * @return el objeto {@link Mascota} encontrado, o {@code null} si no existe.
+     */
     @Override
     public Mascota consultar(int id) {
 
@@ -142,6 +169,11 @@ public class MascotaDAO implements IMascotaDAO{
         return null;
     }
 
+    /**
+     * Recupera todas las mascotas registradas en la base de datos.
+     *
+     * @return una lista con todas las mascotas.
+     */
     @Override
     public List<Mascota> consultarTodos() {
 

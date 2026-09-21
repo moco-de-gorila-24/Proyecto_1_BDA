@@ -7,21 +7,55 @@ package Dominio.Entidades;
 import java.sql.Date;
 
 /**
+ * Entidad que representa a una mascota registrada en el sistema veterinario.
+ * <p>
+ * Cada mascota está asociada a un dueño mediante {@code idDueno}.
+ * </p>
  *
  * @author ACER
+ * @version 1.0
+ * @since 2026
  */
 public class Mascota {
+
+    /** Identificador único de la mascota. */
     private int idMascota;
+
+    /** Nombre de la mascota. */
     private String nombre;
+
+    /** Especie de la mascota (perro, gato, etc.). */
     private String especie;
+
+    /** Fecha de nacimiento de la mascota. */
     private Date fechaNacimiento;
+
+    /** Sexo de la mascota ('M' o 'F'). */
     private String sexo;
+
+    /** Raza de la mascota. */
     private String raza;
+
+    /** Identificador del dueño al que pertenece la mascota. */
     private int idDueno;
 
+    /**
+     * Constructor por defecto.
+     */
     public Mascota() {
     }
 
+    /**
+     * Constructor parametrizado que inicializa todos los atributos de la mascota.
+     *
+     * @param idMascota identificador único.
+     * @param nombre nombre.
+     * @param especie especie.
+     * @param fechaNacimiento fecha de nacimiento.
+     * @param sexo sexo.
+     * @param raza raza.
+     * @param idDueno identificador del dueño.
+     */
     public Mascota(int idMascota, String nombre, String especie, Date fechaNacimiento, String sexo, String raza, int idDueno) {
         this.idMascota = idMascota;
         this.nombre = nombre;
@@ -32,59 +66,115 @@ public class Mascota {
         this.idDueno = idDueno;
     }
 
-    public int getIdMascota() {
-        return idMascota;
+    /**
+     * Obtiene el identificador único de la mascota.
+     * @return el identificador.
+     */
+    public int getIdMascota() { 
+        return idMascota; 
     }
 
-    public void setIdMascota(int idMascota) {
-        this.idMascota = idMascota;
+    /**
+     * Establece el identificador único de la mascota.
+     * @param idMascota el nuevo identificador.
+     */
+    public void setIdMascota(int idMascota) { 
+        this.idMascota = idMascota; 
     }
 
-    public String getNombre() {
-        return nombre;
+    /**
+     * Obtiene el nombre de la mascota.
+     * @return el nombre.
+     */
+    public String getNombre() { 
+        return nombre; 
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    /**
+     * Establece el nombre de la mascota.
+     * @param nombre el nuevo nombre.
+     */
+    public void setNombre(String nombre) { 
+        this.nombre = nombre; 
     }
 
-    public String getEspecie() {
-        return especie;
+    /**
+     * Obtiene la especie.
+     * @return la especie.
+     */
+    public String getEspecie() { 
+        return especie; 
     }
 
-    public void setEspecie(String especie) {
-        this.especie = especie;
+    /**
+     * Establece la especie.
+     * @param especie la nueva especie.
+     */
+    public void setEspecie(String especie) { 
+        this.especie = especie; 
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    /**
+     * Obtiene la fecha de nacimiento.
+     * @return la fecha de nacimiento.
+     */
+    public Date getFechaNacimiento() { 
+        return fechaNacimiento; 
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    /**
+     * Establece la fecha de nacimiento.
+     * @param fechaNacimiento la nueva fecha.
+     */
+    public void setFechaNacimiento(Date fechaNacimiento) { 
+        this.fechaNacimiento = fechaNacimiento; 
     }
 
-    public String getSexo() {
-        return sexo;
+    /**
+     * Obtiene el sexo.
+     * @return el sexo.
+     */
+    public String getSexo() { 
+        return sexo; 
     }
 
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
+    /**
+     * Establece el sexo.
+     * @param sexo el nuevo sexo.
+     */
+    public void setSexo(String sexo) { 
+        this.sexo = sexo; 
     }
 
-    public String getRaza() {
-        return raza;
+    /**
+     * Obtiene la raza.
+     * @return la raza.
+     */
+    public String getRaza() { 
+        return raza; 
     }
 
+    /**
+     * Establece la raza.
+     * @param raza la nueva raza.
+     */
     public void setRaza(String raza) {
-        this.raza = raza;
+        this.raza = raza; 
     }
 
-    public int getIdDueno() {
-        return idDueno;
+    /**
+     * Obtiene el identificador del dueño.
+     * @return el id del dueño.
+     */
+    public int getIdDueno() { 
+        return idDueno; 
     }
 
-    public void setIdDueno(int idDueno) {
-        this.idDueno = idDueno;
+    /**
+     * Establece el identificador del dueño.
+     * @param idDueno el nuevo id del dueño.
+     */
+    public void setIdDueno(int idDueno) { 
+        this.idDueno = idDueno; 
     }
 }

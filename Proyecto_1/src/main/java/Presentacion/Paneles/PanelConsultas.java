@@ -20,24 +20,49 @@ import java.awt.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
+/**
+ * Panel que muestra el listado de consultas veterinarias y permite realizar
+ * operaciones CRUD sobre ellas (agregar, modificar y eliminar), además de
+ * filtrarlas mediante un campo de búsqueda en vivo.
+ *
+ * @author ACER
+ */
 public class PanelConsultas extends JPanel {
 
+    /** Panel con scroll que contiene la tabla de consultas. */
     private JScrollPane jscrollPane;
+
+    /** Panel lateral que contiene los botones de acción. */
     private JPanel panelDerecha;
+
+    /** Panel que contiene el campo de búsqueda y la tabla. */
     private JPanel panelTabla;
 
+    /** Campo de búsqueda en vivo. */
     private CampoBusqueda campoBusqueda;
 
+    /** Modelo de datos de la tabla. */
     private DefaultTableModel modelo;
+
+    /** Tabla que muestra las consultas. */
     private Tabla tabla;
 
+    /** DAO para operaciones sobre consultas. */
     private ConsultaDAO consultaDAO;
+
+    /** DAO para consultar mascotas relacionadas. */
     private MascotaDAO mascotaDAO;
+
+    /** DAO para consultar veterinarios relacionados. */
     private VeterinarioDAO veterinarioDAO;
 
+    /** Formato utilizado para mostrar la fecha y hora. */
     private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
+    /**
+     * Constructor que inicializa los DAOs, construye la interfaz gráfica,
+     * carga las consultas desde la base de datos y configura los eventos.
+     */
     public PanelConsultas() {
 
         consultaDAO = new ConsultaDAO();
@@ -150,8 +175,10 @@ public class PanelConsultas extends JPanel {
         btnEliminar.addActionListener(e -> eliminarConsulta());
     }
 
-    //Cargar consultas
-
+    /**
+     * Carga todas las consultas desde la base de datos y las inserta en el modelo
+     * de la tabla, sustituyendo los IDs de mascota y veterinario por sus nombres.
+     */
     private void cargarConsultas() {
 
         modelo.setRowCount(0);
@@ -172,7 +199,12 @@ public class PanelConsultas extends JPanel {
         }
     }
 
-    //Obtener mascota
+    /**
+     * Obtiene el nombre de una mascota a partir de su identificador.
+     *
+     * @param idMascota identificador de la mascota.
+     * @return el nombre de la mascota, o "No encontrada" si no existe.
+     */
     private String obtenerNombreMascota(int idMascota) {
 
         Mascota mascota = mascotaDAO.consultar(idMascota);
@@ -184,7 +216,12 @@ public class PanelConsultas extends JPanel {
         return mascota.getNombre();
     }
 
-    //Obtener veterinario
+    /**
+     * Obtiene el nombre completo de un veterinario a partir de su identificador.
+     *
+     * @param idVeterinario identificador del veterinario.
+     * @return nombre y apellido paterno del veterinario, o "No encontrado" si no existe.
+     */
     private String obtenerNombreVeterinario(int idVeterinario) {
 
         Veterinario veterinario = veterinarioDAO.consultar(idVeterinario);
@@ -196,7 +233,10 @@ public class PanelConsultas extends JPanel {
         return veterinario.getNombre() + " " + veterinario.getApellidoP();
     }
 
-    //Agregar consulta
+    /**
+     * Abre el diálogo de registro de consulta. Si el usuario acepta, inserta
+     * la consulta en la base de datos y recarga la tabla.
+     */
     private void agregarConsulta() {
 
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -217,7 +257,11 @@ public class PanelConsultas extends JPanel {
         }
     }
 
-    //Modificar consulta
+    /**
+     * Abre el diálogo de modificación con los datos de la consulta seleccionada.
+     * Si el usuario acepta, actualiza la consulta en la base de datos y recarga
+     * la tabla.
+     */
     private void modificarConsulta() {
 
         int filaVista = tabla.getSelectedRow();
@@ -254,7 +298,10 @@ public class PanelConsultas extends JPanel {
         }
     }
 
-    //Eliminar consulta
+    /**
+     * Elimina la consulta seleccionada, previa confirmación del usuario, y
+     * recarga la tabla.
+     */ 
     private void eliminarConsulta() {
 
         int filaVista = tabla.getSelectedRow();
@@ -284,7 +331,10 @@ public class PanelConsultas extends JPanel {
         }
     }
 
-    //Filtrar
+    /**
+     * Filtra las filas de la tabla según el texto ingresado en el campo de
+     * búsqueda, aplicando un {@link TableRowSorter}.
+     */
     private void filtrar() {
 
         String texto = campoBusqueda.getText().trim();

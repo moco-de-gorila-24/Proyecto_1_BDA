@@ -14,24 +14,49 @@ import java.awt.*;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+/**
+ * Panel que muestra el listado de dueños registrados y permite realizar
+ * operaciones CRUD sobre ellos (agregar, modificar y eliminar), además de
+ * filtrarlos mediante un campo de búsqueda en vivo.
+ *
+ * @author ACER
+ */
 public class PanelDuenios extends JPanel {
 
+    /** Panel con scroll que contiene la tabla de dueños. */
     private JScrollPane jscrollPane;
+
+    /** Panel lateral que contiene los botones de acción. */
     private JPanel panelDerecha;
+
+    /** Panel que contiene el campo de búsqueda y la tabla. */
     private JPanel panelTabla;
 
+    /** Botón para agregar un dueño. */
     private Boton botonAgregar;
+
+    /** Botón para modificar un dueño. */
     private Boton botonModificar;
+
+    /** Botón para eliminar un dueño. */
     private Boton botonEliminar;
 
+    /** Campo de búsqueda en vivo. */
     private CampoBusqueda campoBusqueda;
 
+    /** Modelo de datos de la tabla. */
     private DefaultTableModel modelo;
+
+    /** Tabla que muestra los dueños. */
     private Tabla tabla;
 
+    /** DAO para operaciones sobre dueños. */
     private DuenioDAO duenioDAO;
 
+    /**
+     * Constructor que inicializa el DAO, construye la interfaz gráfica,
+     * carga los dueños desde la base de datos y configura los eventos.
+     */
     public PanelDuenios() {
 
         duenioDAO = new DuenioDAO();
@@ -147,8 +172,10 @@ public class PanelDuenios extends JPanel {
         botonEliminar.addActionListener(e -> eliminarDuenio());
     }
 
-    //Cargar dueños
-
+    /**
+     * Carga todos los dueños desde la base de datos y los inserta en el modelo
+     * de la tabla, uniendo los teléfonos en una sola cadena.
+     */
     private void cargarDuenios() {
 
         modelo.setRowCount(0);
@@ -160,8 +187,12 @@ public class PanelDuenios extends JPanel {
         }
     }
 
-    //Obtener telefonos como texto
-
+    /**
+     * Convierte la lista de teléfonos de un dueño en una cadena separada por comas.
+     *
+     * @param duenio dueño del que se obtienen los teléfonos.
+     * @return cadena con los teléfonos separados por comas, o cadena vacía si no tiene.
+     */
     private String obtenerTelefonos(Duenio duenio) {
 
         if (duenio.getTelefonos() == null || duenio.getTelefonos().isEmpty()) {
@@ -171,8 +202,11 @@ public class PanelDuenios extends JPanel {
         return String.join(", ", duenio.getTelefonos());
     }
 
-    //Agregar dueño
-
+    
+    /**
+     * Abre el diálogo de registro de dueño. Si el usuario acepta, inserta el
+     * dueño en la base de datos y recarga la tabla.
+     */
     private void agregarDuenio() {
 
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -196,8 +230,12 @@ public class PanelDuenios extends JPanel {
         }
     }
 
-    //Modificar dueño
-
+    
+    /**
+     * Abre el diálogo de modificación con los datos del dueño seleccionado.
+     * Si el usuario acepta, actualiza el dueño en la base de datos y recarga
+     * la tabla.
+     */
     private void modificarDuenio() {
 
         int filaVista = tabla.getSelectedRow();
@@ -242,8 +280,10 @@ public class PanelDuenios extends JPanel {
         }
     }
 
-    //Eliminar dueño
-
+    /**
+     * Elimina el dueño seleccionado, previa confirmación del usuario, y
+     * recarga la tabla.
+     */
     private void eliminarDuenio() {
 
         int filaVista = tabla.getSelectedRow();
@@ -280,8 +320,10 @@ public class PanelDuenios extends JPanel {
         }
     }
 
-    //Filtrar tabla
-
+     /**
+     * Filtra las filas de la tabla según el texto ingresado en el campo de
+     * búsqueda, aplicando un {@link TableRowSorter}.
+     */
     private void filtrar() {
 
         String texto = campoBusqueda.getText().trim();
