@@ -17,7 +17,7 @@ import java.util.List;
  * Implementación concreta de {@link IVeterinarioDAO} que gestiona el acceso a datos
  * de la tabla {@code veterinario} en la base de datos veterinaria.
  *
- * @author ACER
+ * @author Jorge
  */
 public class VeterinarioDAO implements IVeterinarioDAO{
     /** Objeto de conexión a la base de datos. */

@@ -10,7 +10,7 @@ import java.awt.*;
  * visual propio del sistema veterinario: encabezado negro con texto blanco,
  * sin líneas de cuadrícula, sin espaciado entre celdas y edición deshabilitada.
  *
- * @author ACER
+ * @author Andrés
  */
 public class Tabla extends JTable {
 

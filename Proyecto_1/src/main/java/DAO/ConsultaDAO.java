@@ -21,7 +21,7 @@ import java.util.List;
  * Cada método abre y cierra su propia conexión JDBC mediante {@link ConexionDB}.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class ConsultaDAO implements IConsultaDAO {
     /** Objeto de conexión a la base de datos. */

@@ -14,7 +14,7 @@ import Presentacion.Paneles.PanelVeterinarios;
  * interfaz gráfica y de permitir la navegación entre los distintos módulos
  * (Dueños, Mascotas, Veterinarios y Consultas) mediante un {@link CardLayout}.
  *
- * @author ACER
+ * @author Luis
  */
 public class MainFrame extends JFrame {
     

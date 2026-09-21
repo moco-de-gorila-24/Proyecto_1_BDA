@@ -13,7 +13,7 @@ import java.util.List;
  * a una o más mascotas.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class Duenio {
     /** Identificador único del dueño. */

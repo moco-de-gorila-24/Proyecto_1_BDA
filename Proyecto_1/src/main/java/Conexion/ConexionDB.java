@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * {@code veterinaria} en {@code localhost:3306}.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class ConexionDB implements IConexion{
      /** Usuario de la base de datos. */

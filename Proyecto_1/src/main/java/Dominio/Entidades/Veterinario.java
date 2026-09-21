@@ -10,7 +10,7 @@ package Dominio.Entidades;
  * Cada veterinario puede estar asociado a múltiples consultas médicas.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class Veterinario {
     /** Identificador único del veterinario. */

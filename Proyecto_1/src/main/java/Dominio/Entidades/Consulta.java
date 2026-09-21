@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  * veterinario ({@code idVeterinario}).
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class Consulta {
    /** Identificador único de la consulta. */

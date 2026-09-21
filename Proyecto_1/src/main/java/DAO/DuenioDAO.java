@@ -24,7 +24,7 @@ import java.util.List;
  * actualización y eliminación afectan a ambas tablas.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public class DuenioDAO implements IDuenioDAO {
     /** Objeto de conexión a la base de datos. */

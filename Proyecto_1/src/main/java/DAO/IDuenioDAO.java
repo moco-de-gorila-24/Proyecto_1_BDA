@@ -11,7 +11,7 @@ import java.util.List;
  * Interfaz que define las operaciones CRUD disponibles para la entidad
  * {@link Duenio} sobre la base de datos.
  *
- * @author ACER
+ * @author Jorge
  */
 public interface IDuenioDAO {
 

@@ -13,7 +13,7 @@ import java.sql.Connection;
  * concreta de crear una conexión JDBC hacia el gestor de base de datos MySQL.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  */
 public interface IConexion {
     /**

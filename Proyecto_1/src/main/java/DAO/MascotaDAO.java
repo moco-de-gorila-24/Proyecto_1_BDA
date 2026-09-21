@@ -18,7 +18,7 @@ import java.util.List;
  * Implementación concreta de {@link IMascotaDAO} que gestiona el acceso a datos
  * de la tabla {@code mascota} en la base de datos veterinaria.
  *
- * @author ACER
+ * @author Jorge
  */
 public class MascotaDAO implements IMascotaDAO{
     /** Objeto de conexión a la base de datos. */

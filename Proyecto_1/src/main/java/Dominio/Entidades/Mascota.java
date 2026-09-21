@@ -12,7 +12,7 @@ import java.sql.Date;
  * Cada mascota está asociada a un dueño mediante {@code idDueno}.
  * </p>
  *
- * @author ACER
+ * @author Jorge
  * @version 1.0
  * @since 2026
  */

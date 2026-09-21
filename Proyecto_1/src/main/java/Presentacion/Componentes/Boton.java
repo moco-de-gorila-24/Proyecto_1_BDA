@@ -7,7 +7,7 @@ import java.awt.*;
  * Componente personalizado que extiende {@link JButton} y dibuja un botón
  * con esquinas redondeadas y estilo visual propio del sistema veterinario.
  *
- * @author ACER
+ * @author Andrés
  */
 public class Boton extends JButton {
 
