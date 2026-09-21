@@ -46,7 +46,7 @@ public class ConexionDB implements IConexion{
      */
     public ConexionDB() {
         this.user = "root";
-        this.pass = "LMayli77";
+        this.pass = "ITSON";
         this.cadenaConexion = "jdbc:mysql://localhost:3306/veterinaria";
     }
 
