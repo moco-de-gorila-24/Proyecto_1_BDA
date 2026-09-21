@@ -4,7 +4,9 @@
  */
 package DAO;
 
+
 import Conexion.ConexionDB;
+import Conexion.IConexion;
 import Dominio.Entidades.Consulta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +25,7 @@ import java.util.List;
  */
 public class ConsultaDAO implements IConsultaDAO {
     /** Objeto de conexión a la base de datos. */
-    private ConexionDB conexion = new ConexionDB();
+    private IConexion conexion = new ConexionDB();
     
     /**
      * Inserta una nueva consulta en la tabla {@code consulta}.

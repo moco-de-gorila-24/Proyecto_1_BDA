@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class DuenioDAO implements IDuenioDAO {
     /** Objeto de conexión a la base de datos. */
-    private IConexion conexion = new ConexionDB("root", "ITSON");
+    private IConexion conexion = new ConexionDB();
 
     /**
      * Inserta un nuevo dueño en la base de datos y posteriormente registra

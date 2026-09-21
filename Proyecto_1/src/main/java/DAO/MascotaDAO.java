@@ -5,6 +5,7 @@
 package DAO;
 
 import Conexion.ConexionDB;
+import Conexion.IConexion;
 import Dominio.Entidades.Mascota;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class MascotaDAO implements IMascotaDAO{
     /** Objeto de conexión a la base de datos. */
-    private ConexionDB conexion = new ConexionDB();
+    private IConexion conexion = new ConexionDB();
 
     /**
      * Inserta una nueva mascota en la tabla {@code mascota}.

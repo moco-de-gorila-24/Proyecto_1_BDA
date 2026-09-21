@@ -5,6 +5,7 @@
 package DAO;
 
 import Conexion.ConexionDB;
+import Conexion.IConexion;
 import Dominio.Entidades.Veterinario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class VeterinarioDAO implements IVeterinarioDAO{
     /** Objeto de conexión a la base de datos. */
-    private ConexionDB conexion = new ConexionDB();
+    private IConexion conexion = new ConexionDB();
 
     /**
      * Inserta un nuevo veterinario en la tabla {@code veterinario}.
