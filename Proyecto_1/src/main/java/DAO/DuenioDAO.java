@@ -16,10 +16,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación concreta de {@link IDuenioDAO} que gestiona el acceso a datos
+ * de las tablas {@code dueno} y {@code telefono_dueno}.
+ * <p>
+ * Un dueño puede tener múltiples teléfonos, por lo que las operaciones de inserción,
+ * actualización y eliminación afectan a ambas tablas.
+ * </p>
+ *
+ * @author ACER
+ */
 public class DuenioDAO implements IDuenioDAO {
-
+    /** Objeto de conexión a la base de datos. */
     private IConexion conexion = new ConexionDB("root", "ITSON");
 
+    /**
+     * Inserta un nuevo dueño en la base de datos y posteriormente registra
+     * sus teléfonos asociados en la tabla {@code telefono_dueno}.
+     *
+     * @param duenio objeto {@link Duenio} con los datos a registrar.
+     * @return {@code true} si la inserción fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean insertar(Duenio duenio) {
 
@@ -69,7 +86,14 @@ public class DuenioDAO implements IDuenioDAO {
 
         return false;
     }
-
+    
+    /**
+     * Actualiza los datos de un dueño existente y reemplaza todos sus
+     * teléfonos asociados en la tabla {@code telefono_dueno}.
+     *
+     * @param duenio objeto {@link Duenio} con los datos actualizados.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean actualizar(Duenio duenio) {
 
@@ -122,7 +146,13 @@ public class DuenioDAO implements IDuenioDAO {
 
         return false;
     }
-
+    
+    /**
+     * Elimina un dueño y todos sus teléfonos asociados.
+     *
+     * @param id identificador único del dueño.
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso contrario.
+     */
     @Override
     public boolean eliminar(int id) {
 
@@ -152,7 +182,14 @@ public class DuenioDAO implements IDuenioDAO {
 
         return false;
     }
-
+    
+    /**
+     * Consulta un dueño específico por su identificador, incluyendo
+     * la lista de teléfonos asociados.
+     *
+     * @param id identificador único del dueño.
+     * @return el objeto {@link Duenio} encontrado con sus teléfonos, o {@code null} si no existe.
+     */
     @Override
     public Duenio consultar(int id) {
 
@@ -201,7 +238,11 @@ public class DuenioDAO implements IDuenioDAO {
 
         return null;
     }
-
+    /**
+     * Recupera todos los dueños registrados, incluyendo sus teléfonos asociados.
+     *
+     * @return una lista con todos los dueños y sus teléfonos.
+     */
     @Override
     public List<Duenio> consultarTodos() {
 
