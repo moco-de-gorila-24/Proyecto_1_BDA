@@ -1,155 +1,300 @@
 package Presentacion.Paneles;
 
+import DAO.ConsultaDAO;
+import DAO.MascotaDAO;
+import DAO.VeterinarioDAO;
+import Dominio.Entidades.Consulta;
+import Dominio.Entidades.Mascota;
+import Dominio.Entidades.Veterinario;
 import Presentacion.Componentes.Boton;
 import Presentacion.Componentes.CampoBusqueda;
 import Presentacion.Componentes.Tabla;
 import Presentacion.Dialog.DialogConsulta;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class PanelConsultas extends JPanel {
+
     private JScrollPane jscrollPane;
     private JPanel panelDerecha;
     private JPanel panelTabla;
-    private Boton agendar;
-    private Boton modificar;
-    private Boton eliminar;
+
     private CampoBusqueda campoBusqueda;
+
     private DefaultTableModel modelo;
     private Tabla tabla;
 
-    public PanelConsultas(){
+    private ConsultaDAO consultaDAO;
+    private MascotaDAO mascotaDAO;
+    private VeterinarioDAO veterinarioDAO;
+
+    private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    public PanelConsultas() {
+
+        consultaDAO = new ConsultaDAO();
+        mascotaDAO = new MascotaDAO();
+        veterinarioDAO = new VeterinarioDAO();
+
         setLayout(new BorderLayout());
 
-        jscrollPane = new JScrollPane();
-        jscrollPane.setPreferredSize(new Dimension(800, 500));
+        // TABLA
 
-        panelDerecha = new JPanel();
-        panelDerecha.setLayout(new GridBagLayout());
+        jscrollPane = new JScrollPane();
+        jscrollPane.setPreferredSize(new Dimension(900, 500));
 
         panelTabla = new JPanel(new BorderLayout());
         panelTabla.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
 
-        // ===== Campo de búsqueda arriba de la tabla =====
+        //Busqueda
+
         JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        campoBusqueda = new CampoBusqueda("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*", 25);
-        campoBusqueda.setToolTipText("Buscar por motivo o diagnóstico (solo letras)");
+
+        campoBusqueda = new CampoBusqueda(".*", 5);
+        campoBusqueda.setToolTipText("Buscar por motivo, diagnostico, tratamiento, mascota o veterinario");
+
         panelBusqueda.add(new JLabel("Buscar:"));
         panelBusqueda.add(campoBusqueda);
+
         panelTabla.add(panelBusqueda, BorderLayout.NORTH);
 
-        // Tabla
+        // MODELO
+
         modelo = new DefaultTableModel() {
+
             @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
+
         modelo.addColumn("ID");
-        modelo.addColumn("ID Mascota");
-        modelo.addColumn("ID Veterinario");
+        modelo.addColumn("Fecha y hora");
         modelo.addColumn("Motivo");
         modelo.addColumn("Diagnóstico");
         modelo.addColumn("Tratamiento");
         modelo.addColumn("Costo");
-
-        modelo.addRow(new Object[]{"1", "101", "201", "Vacunación", "Sano", "Refuerzo", "350.00"});
+        modelo.addColumn("Mascota");
+        modelo.addColumn("Veterinario");
 
         tabla = new Tabla(modelo);
-        tabla.setRowHeight(50);
+        tabla.setRowHeight(40);
+
         jscrollPane.setViewportView(tabla);
+
         panelTabla.add(jscrollPane, BorderLayout.CENTER);
 
-        agendar = new Boton("Agendar consultas");
-        modificar = new Boton("Modificar Consulta");
-        eliminar = new Boton("Eliminar Consulta");
+        //Botones
+
+        panelDerecha = new JPanel(new GridBagLayout());
+
+        Boton btnAgregar = new Boton("Agregar Consulta");
+        Boton btnModificar = new Boton("Modificar Consulta");
+        Boton btnEliminar = new Boton("Eliminar Consulta");
 
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         gbc.insets = new Insets(15, 5, 15, 8);
-
         gbc.gridy = 0;
-        panelDerecha.add(agendar, gbc);
-        gbc.gridy = 1;
-        panelDerecha.add(modificar, gbc);
-        gbc.gridy = 2;
-        panelDerecha.add(eliminar, gbc);
 
+        panelDerecha.add(btnAgregar, gbc);
+
+        gbc.gridy = 1;
+
+        panelDerecha.add(btnModificar, gbc);
+
+        gbc.gridy = 2;
+
+        panelDerecha.add(btnEliminar, gbc);
+
+        //Agregar al panel
         add(panelDerecha, BorderLayout.WEST);
         add(panelTabla, BorderLayout.CENTER);
 
-        // ===== Filtro en vivo con expresión regular =====
-        campoBusqueda.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { filtrar(); }
-        });
+        //Cargar consultas
+        cargarConsultas();
 
-        // Acciones
-        agendar.addActionListener(e -> {
-            DialogConsulta dialog = new DialogConsulta((Frame) SwingUtilities.getWindowAncestor(this));
-            dialog.setVisible(true);
-            if (dialog.isAceptado()) {
-                modelo.addRow(new Object[]{
-                    modelo.getRowCount() + 1,
-                    dialog.getIdMascota(),
-                    dialog.getIdVeterinario(),
-                    dialog.getMotivo(),
-                    dialog.getDiagnostico(),
-                    dialog.getTratamiento(),
-                    dialog.getCosto()
-                });
+        //Buscador
+        campoBusqueda.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrar();
             }
         });
 
-        // ELIMINACIÓN DIRECTA: solo confirmación
-        eliminar.addActionListener(e -> {
-            int fila = tabla.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione una consulta para eliminar");
-                return;
-            }
-            int confirm = JOptionPane.showConfirmDialog(
-                this, "¿Eliminar la consulta seleccionada?",
-                "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (confirm == JOptionPane.YES_OPTION) {
-                modelo.removeRow(fila);
-            }
-        });
-
-        modificar.addActionListener(e -> {
-            int fila = tabla.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione una consulta para modificar");
-                return;
-            }
-            DialogConsulta dialog = new DialogConsulta((Frame) SwingUtilities.getWindowAncestor(this));
-            dialog.setVisible(true);
-            if (dialog.isAceptado()) {
-                modelo.setValueAt(dialog.getIdMascota(), fila, 1);
-                modelo.setValueAt(dialog.getIdVeterinario(), fila, 2);
-                modelo.setValueAt(dialog.getMotivo(), fila, 3);
-                modelo.setValueAt(dialog.getDiagnostico(), fila, 4);
-                modelo.setValueAt(dialog.getTratamiento(), fila, 5);
-                modelo.setValueAt(dialog.getCosto(), fila, 6);
-            }
-        });
+        //Eventos
+        btnAgregar.addActionListener(e -> agregarConsulta());
+        btnModificar.addActionListener(e -> modificarConsulta());
+        btnEliminar.addActionListener(e -> eliminarConsulta());
     }
 
-    // ===== Método de filtrado con TableRowSorter y regex =====
+    //Cargar consultas
+
+    private void cargarConsultas() {
+
+        modelo.setRowCount(0);
+        List<Consulta> consultas = consultaDAO.consultarTodos();
+
+        for (Consulta consulta : consultas) {
+
+            String fechaHora = "";
+
+            if (consulta.getFechaHora() != null) {
+                fechaHora = formatoFecha.format(consulta.getFechaHora());
+            }
+
+            String mascota = obtenerNombreMascota(consulta.getIdMascota());
+            String veterinario = obtenerNombreVeterinario(consulta.getIdVeterinario());
+
+            modelo.addRow(new Object[]{consulta.getIdConsulta(), fechaHora, consulta.getMotivo(), consulta.getDiagnostico(), consulta.getTratamiento(), consulta.getCosto(), mascota, veterinario});
+        }
+    }
+
+    //Obtener mascota
+    private String obtenerNombreMascota(int idMascota) {
+
+        Mascota mascota = mascotaDAO.consultar(idMascota);
+
+        if (mascota == null) {
+            return "No encontrada";
+        }
+
+        return mascota.getNombre();
+    }
+
+    //Obtener veterinario
+    private String obtenerNombreVeterinario(int idVeterinario) {
+
+        Veterinario veterinario = veterinarioDAO.consultar(idVeterinario);
+
+        if (veterinario == null) {
+            return "No encontrado";
+        }
+
+        return veterinario.getNombre() + " " + veterinario.getApellidoP();
+    }
+
+    //Agregar consulta
+    private void agregarConsulta() {
+
+        Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogConsulta dialog = new DialogConsulta(frame);
+
+        if (dialog.isAceptado()) {
+
+            Consulta consulta = dialog.getConsulta();
+            boolean resultado = consultaDAO.insertar(consulta);
+
+            if (resultado) {
+
+                JOptionPane.showMessageDialog(this, "Consulta agregada correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                cargarConsultas();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo agregar la consulta.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    //Modificar consulta
+    private void modificarConsulta() {
+
+        int filaVista = tabla.getSelectedRow();
+
+        if (filaVista == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una consulta para modificar.", "Consulta", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+        int id = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+        Consulta consulta = consultaDAO.consultar(id);
+
+        if (consulta == null) {
+            JOptionPane.showMessageDialog(this, "No se encontro la consulta seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Frame frame = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogConsulta dialog = new DialogConsulta(frame, consulta);
+
+        if (dialog.isAceptado()) {
+
+            Consulta consultaActualizada = dialog.getConsulta();
+            boolean resultado = consultaDAO.actualizar(consultaActualizada);
+
+            if (resultado) {
+                JOptionPane.showMessageDialog(this, "Consulta actualizada correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                cargarConsultas();
+            } else {
+
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar la consulta.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    //Eliminar consulta
+    private void eliminarConsulta() {
+
+        int filaVista = tabla.getSelectedRow();
+
+        if (filaVista == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una consulta para eliminar.", "Consulta", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+        int id = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+        String motivo = modelo.getValueAt(filaModelo, 2).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Esta seguro de eliminar la consulta?\n\n" + "Motivo: " + motivo, "Confirmar eliminacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        boolean resultado = consultaDAO.eliminar(id);
+
+        if (resultado) {
+            JOptionPane.showMessageDialog(this, "Consulta eliminada correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            cargarConsultas();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar la consulta.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Filtrar
     private void filtrar() {
+
         String texto = campoBusqueda.getText().trim();
-        javax.swing.table.TableRowSorter<DefaultTableModel> sorter =
-                new javax.swing.table.TableRowSorter<>(modelo);
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
         tabla.setRowSorter(sorter);
 
         if (texto.isEmpty()) {
             sorter.setRowFilter(null);
         } else {
-            // Filtra por Motivo (col 3) y Diagnóstico (col 4), ignorando mayúsculas
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 3, 4));
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3, 4, 6, 7));
         }
     }
 }
