@@ -22,9 +22,7 @@ public class VeterinarioDAO implements IVeterinarioDAO{
     @Override
     public boolean insertar(Veterinario veterinario) {
 
-        String sql = "INSERT INTO veterinario "
-                + "(nombre, apellidoP, apellidoM, cedula_profesional, especialidad, telefono) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO veterinario (nombre, apellidoP, apellidoM, cedula_profesional, especialidad, telefono) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = this.conexion.crearConexionBD();
              PreparedStatement cmd = con.prepareStatement(sql)){
